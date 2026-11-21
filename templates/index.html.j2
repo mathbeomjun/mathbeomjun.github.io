@@ -19,6 +19,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{{ profile.name }} ({{ profile.name_ko }})</title>
 <meta name="description" content="{{ profile.name }}, {{ profile.position }}, {{ profile.department }}, {{ profile.institution }}. {{ profile.interests_web | e }}.">
+{# 검색엔진·링크 미리보기용 정보. 내용은 cv.yml 의 profile 에서 자동으로 채워집니다. #}
+{% set site = (profile.site_url or profile.url or '').rstrip('/') %}
+{% set desc = profile.name ~ ' (' ~ profile.name_ko ~ '), ' ~ profile.position ~ ', ' ~ profile.department ~ ', ' ~ profile.institution ~ '. ' ~ profile.interests_web ~ '.' %}
+{% if site %}
+<link rel="canonical" href="{{ site }}/">
+<meta property="og:url" content="{{ site }}/">
+{% endif %}
+<meta property="og:type" content="profile">
+<meta property="og:site_name" content="{{ profile.name }}">
+<meta property="og:title" content="{{ profile.name }} ({{ profile.name_ko }})">
+<meta property="og:description" content="{{ desc | e }}">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ko_KR">
+<meta property="profile:first_name" content="{{ profile.name.split(' ')[0] }}">
+<meta property="profile:last_name" content="{{ profile.name.split(' ')[-1] }}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{ profile.name }} ({{ profile.name_ko }})">
+<meta name="twitter:description" content="{{ desc | e }}">
+<script type="application/ld+json">
+{{ jsonld }}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://hangeul.pstatic.net/hangeul_static/css/maru-buri.css">

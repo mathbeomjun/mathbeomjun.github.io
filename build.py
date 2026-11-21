@@ -23,11 +23,13 @@
     context()       출력(web/cv/record)별로 hide 필터(vis), 섹션 on/off(on), 링크 선택(link) 제공
     render_html()   templates/index.html.j2 → _site/index.html
     render_pdf()    templates/cv.tex.j2 → XeLaTeX(latexmk) → cv.pdf / record.pdf
+    write_seo()     _site/sitemap.xml, robots.txt (검색엔진용, profile.site_url 기준)
 의존성: pyyaml, jinja2, bibtexparser==1.4.2 (2.x 는 API 가 달라 동작하지 않음), XeLaTeX, Noto Serif CJK KR.
 """
 import collections
 import datetime as dt
 import html
+import json
 import re
 import shutil
 import subprocess
@@ -209,12 +211,47 @@ def context(data, out):
     return c
 
 
+def site_meta(data):
+    """검색엔진용 구조화 정보(JSON-LD, schema.org ProfilePage/Person). 내용은 cv.yml 의 profile 에서만 가져옴."""
+    p = data["profile"]
+    base = (p.get("site_url") or p.get("url") or "").rstrip("/")
+    person = {
+        "@type": "Person",
+        "name": p["name"],
+        "alternateName": p.get("name_ko"),
+        "jobTitle": p.get("position"),
+        "worksFor": {"@type": "CollegeOrUniversity", "name": p.get("institution"),
+                     "department": {"@type": "Organization", "name": p.get("department")}},
+        "affiliation": {"@type": "CollegeOrUniversity", "name": p.get("institution")},
+        "knowsAbout": [s.strip() for s in re.split(r",| and ", p.get("interests_web") or "") if s.strip()],
+        "url": base + "/" if base else None,
+    }
+    page = {"@context": "https://schema.org", "@type": "ProfilePage", "mainEntity":
+            {k: v for k, v in person.items() if v}}
+    return json.dumps(page, ensure_ascii=False, indent=1).replace("</", "<\\/")
+
+
+def write_seo(data):
+    """_site/sitemap.xml, _site/robots.txt — profile.site_url 이 있을 때만."""
+    base = (data["profile"].get("site_url") or "").rstrip("/")
+    if not base:
+        return
+    today = dt.date.today().isoformat()
+    paths = [""] + (["cv.pdf"] if (OUT / "cv.pdf").exists() else [])
+    paths += sorted(f.relative_to(OUT).as_posix() for f in (OUT / "files").rglob("*.pdf")) if (OUT / "files").exists() else []
+    urls = "".join(f"  <url><loc>{html.escape(base + '/' + p)}</loc><lastmod>{today}</lastmod></url>\n" for p in paths)
+    (OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + "</urlset>\n", encoding="utf-8")
+    (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {base}/sitemap.xml\n", encoding="utf-8")
+
+
 def render_html(data, inline=False):
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(ROOT / "templates"), autoescape=False,
                              trim_blocks=True, lstrip_blocks=True)
     env.filters["t"] = tex2html
     env.filters["e"] = lambda s: html.escape(str(s or ""))
     ctx = context(data, "web")
+    ctx["jsonld"] = site_meta(data)
     (OUT / "index.html").write_text(env.get_template("index.html.j2").render(**ctx, inline=False), encoding="utf-8")
     if inline:
         css = (ROOT / "assets" / "style.css").read_text(encoding="utf-8")
@@ -257,6 +294,7 @@ def main():
         render_pdf(data, "cv", OUT / "cv.pdf")
     if "--record" in sys.argv:
         render_pdf(data, "record", PRIVATE_OUT / "record.pdf")
+    write_seo(data)
     print(f"built: {len(data['publications'])} publications, {len(data['preprints'])} preprints, "
           f"{len(data.get('talks', []))} talks")
 

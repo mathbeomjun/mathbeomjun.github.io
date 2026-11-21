@@ -27,6 +27,9 @@ build.py                 빌드 스크립트
 | 홈페이지 `index.html` | 공개 | push 하면 자동 / `python build.py --no-pdf` |
 | 공개 CV `cv.pdf` | 공개 | push 하면 자동 / `python build.py` |
 | 전체 기록 `record.pdf` | 비공개 | 로컬에서 `python build.py --record` 만 |
+| `sitemap.xml`, `robots.txt` | 공개 | 빌드할 때 자동 (홈페이지·cv.pdf·files/ PDF 목록, `profile.site_url` 기준) |
+
+홈페이지 `<head>`의 검색·링크 미리보기 정보(Open Graph, JSON-LD)는 `data/cv.yml` 의 `profile` 에서 자동으로 채워집니다.
 
 ## 2. 무엇을 어디에 (자주 하는 작업)
 
