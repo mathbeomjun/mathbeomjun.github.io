@@ -36,6 +36,7 @@
 
 <nav class="nav" aria-label="Sections">
   <a href="#papers">Papers</a>
+  {% if on('organized') %}<a href="#organized">Conferences</a>{% endif %}
   <a href="#teaching">Teaching</a>
   <a href="cv.pdf">CV</a>
 </nav>
@@ -121,7 +122,7 @@
   {% endif %}
 
   {% if on('organized') %}
-  <section class="row">
+  <section class="row" id="organized">
     <h2>Organized</h2>
     <ul class="plain-list">
     {% for o in vis(organized) %}
