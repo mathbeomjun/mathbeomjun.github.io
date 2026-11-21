@@ -1,0 +1,637 @@
+# ═════════════════════════════════════════════════════════════════════
+#  data/cv.yml — 논문을 제외한 모든 이력의 원본 (Single source of truth)
+# ═════════════════════════════════════════════════════════════════════
+#
+#  ▶ 이 파일을 수정하면 무엇이 바뀌나
+#    python build.py 를 실행하면(또는 GitHub에 push하면 자동으로) 아래 세 가지가 다시 만들어집니다.
+#      web    : 홈페이지 _site/index.html       — 공개, 간결하게
+#      cv     : 공개 CV _site/cv.pdf            — 공개, 일반적인 학술 CV 수준
+#      record : 전체 기록 private_out/record.pdf — 비공개, 평가·보고용 (python build.py --record)
+#
+#  ▶ 논문은 여기 없습니다 → data/papers.bib 에 추가하세요.
+#  ▶ 공개하면 안 되는 내용(연구비 금액, 학생 이름, 심사 원고번호 등) → private/private.yml
+#    이 파일(cv.yml)은 공개 저장소에 올라가므로 누구나 볼 수 있습니다.
+#
+#  ▶ 무엇이 어디에 보이는지 정하는 세 가지 방법
+#    1) 섹션 단위 : 바로 아래 outputs 의 목록에 섹션 이름을 넣거나 뺍니다. 목록 순서 = 출력 순서.
+#    2) 항목 단위 : 항목에 hide: [web] / hide: [cv] / hide: [web, cv] 를 붙이면 그 출력에서만 빠집니다.
+#                   record 에는 hide 와 상관없이 항상 모두 나옵니다.
+#    3) memo     : 항목에 memo: "..." 를 달면 record 에만 작은 글씨로 나옵니다.
+#
+#  ▶ 공통 표기 규칙
+#    - 기간(period): "2025.07 –", "2021.07 – 2025.06", "2024" 처럼 문자열로, 반드시 따옴표.
+#      대시는 en dash(–)를 씁니다. 하이픈(-)도 동작은 하지만 모양이 다릅니다.
+#    - 콜론(:)이나 따옴표가 들어간 문자열은 전체를 큰따옴표로 감쌉니다.
+#      예) title: "MATRIX–RIMS Tandem Workshop: Geometric Flows and Related Phenomena"
+#    - 한글 병기: ko: 필드에 적으면 CV/record 에서 제목 뒤 괄호로 붙습니다. 홈페이지에는 안 나옵니다.
+#    - 링크: url: 은 외부 주소. file: 은 저장소의 files/ 폴더에 넣은 PDF 경로(예: files/talk.pdf).
+#      file 과 url 을 둘 다 주면 홈페이지는 file, CV는 profile.site_url 이 있을 때 file, 없으면 url 을 씁니다.
+#    - 항목 순서: 각 목록은 적힌 순서대로 출력됩니다. 최신 항목을 맨 위에 추가하세요.
+#      (예외: talks 는 날짜 문자열 그대로 위에서부터 출력되므로 역시 최신을 위에.)
+#    - 들여쓰기는 스페이스 2칸. 탭 문자를 쓰면 빌드가 실패합니다.
+#
+#  ▶ 수정 후 확인
+#    로컬: python build.py --no-pdf  (홈페이지만, LaTeX 불필요)  /  python build.py --record (전부)
+#    GitHub: push 후 저장소의 Actions 탭에서 초록색 체크가 뜨면 배포 완료.
+# ═════════════════════════════════════════════════════════════════════
+
+# ── outputs ─────────────────────────────────────────────────────────
+#  각 결과물에 어떤 섹션을 어떤 순서로 넣을지 정합니다.
+#  사용 가능한 섹션 이름:
+#    summary(record 전용 통계), interests, positions, education, publications, preprints,
+#    grants, service, referee, organized, teaching, talks, notes
+#  홈페이지(web)는 템플릿 구조상 publications→preprints→positions→… 순서가 고정이며,
+#  여기서는 '보일지 말지'만 결정합니다. cv/record 는 이 목록 순서대로 조판됩니다.
+outputs:
+  web:    [publications, preprints, positions, education, organized, grants, service, teaching, notes]
+  cv:     [interests, positions, education, publications, preprints, grants, service, organized, teaching, talks, notes]
+  record: [summary, interests, positions, education, publications, preprints, grants, service, referee, organized, teaching, talks, notes]
+
+# ── profile ─────────────────────────────────────────────────────────
+#  홈페이지 머리글과 CV 머리글에 쓰이는 기본 정보.
+#    interests_web : 홈페이지 이름 아래 한 줄 (짧게)
+#    interests_cv  : CV의 Research interests 문단
+#    site_url      : 배포된 새 홈페이지 주소. 정해지면 반드시 채우세요 (예: https://mathbeomjun.github.io).
+#                    CV 안의 files/ 링크가 이 주소를 기준으로 만들어집니다.
+profile:
+  name: Beomjun Choi
+  name_ko: 최범준
+  position: Associate Professor
+  department: Department of Mathematical Sciences
+  institution: KAIST
+  address: "Room 3403, Building E6-1, KAIST, 291 Daehak-ro, Yuseong-gu, Daejeon 34141, Korea"
+  emails: [bchoi@kaist.ac.kr, cbj5212@gmail.com]
+  url: https://mathbeomjun.github.io   # CV 머리글의 "Homepage" 링크
+  # 배포된 홈페이지 주소. CV 안의 files/ 링크가 이 주소를 기준으로 만들어집니다 (비우면 각 항목의 url 사용).
+  site_url: https://mathbeomjun.github.io
+  nationality: South Korea
+  interests_web: Geometric analysis, calculus of variations, gradient flows and optimization
+  interests_cv: >-
+    Partial differential equations, differential geometry and their applications
+    in the theory of machine learning and optimization
+
+# ── positions (경력) ─────────────────────────────────────────────────
+#  필드: role(직위), org(기관, CV용 전체 표기), web(홈페이지용 짧은 표기, 생략 시 role, org),
+#        period, group(current | previous — CV에서 Current/Previous appointments로 나뉨),
+#        hide, memo
+#  새 직위 예시 (맨 위에 추가하고, 이전 직위의 group 을 previous 로, period 끝을 채우기):
+#    - role: Professor
+#      org: Department of Mathematical Sciences, KAIST, Korea
+#      web: Professor, KAIST, Korea
+#      period: "2030.03 –"
+#      group: current
+positions:
+  - role: Associate Professor
+    org: Department of Mathematical Sciences, KAIST, Korea
+    web: Associate Professor, KAIST, Korea
+    period: "2025.07 –"
+    group: current
+  - role: Adjunct Professor
+    org: Graduate School of AI-Math, KAIST, Korea
+    web: Adjunct Professor, Graduate School of AI-Math, KAIST
+    period: "2025.09 –"
+    group: current
+  - role: Assistant Professor
+    org: Department of Mathematics, POSTECH, Korea
+    web: Assistant Professor, POSTECH, Korea
+    period: "2021.07 – 2025.06"
+    group: previous
+  - role: CMC Fellow
+    org: Korea Institute for Advanced Study, Korea
+    web: CMC Fellow, Korea Institute for Advanced Study, Korea
+    period: "2021.05 – 2021.06"
+    group: previous
+  - role: Postdoctoral Research Fellow
+    org: Department of Mathematics, University of Toronto, Canada
+    web: Postdoctoral Research Fellow, University of Toronto, Canada
+    period: "2019.08 – 2021.04"
+    group: previous
+  - role: Research Personnel (alternative military service)
+    org: National Institute for Mathematical Sciences (NIMS), Korea
+    period: "2013.07 – 2016.07"
+    group: previous
+    hide: [web]
+    memo: Jul 8, 2013 – Jul 18, 2016.
+
+# ── education (학력) ─────────────────────────────────────────────────
+#  필드: degree, place, period, notes(목록, 회색 작은 줄로 표시), memo(record 전용)
+education:
+  - degree: PhD in Mathematics
+    place: Columbia University, New York, USA
+    period: "2011.09 – 2019.05"
+    notes:
+      - Advisor Panagiota Daskalopoulos
+      - Military leave of absence (2013.06 – 2016.08)
+    memo: "MA conferred Oct 17, 2012; PhD conferred May 22, 2019. Thesis: Non-compact geometric flows: long time existence and type II singularities."
+  - degree: BS in Mathematical Sciences
+    place: KAIST, Daejeon, Korea
+    period: "2007.02 – 2011.02"
+    notes: [Summa cum laude]
+
+# ── grants (연구비·수상·펠로십) ──────────────────────────────────────
+#  필드: title(영문 명칭, 홈페이지·CV 공통), ko(한글 병기, CV/record),
+#        number(과제번호 — CV/record에 표시. 논문 사사에 쓰는 번호),
+#        ack(사사 문구 전체 — record 에만 표시. 논문 Acknowledgment에 그대로 복사해 쓰도록),
+#        url, period, hide, memo
+#  연구비 금액·역할 같은 비공개 세부는 여기 말고 private/private.yml 의 "Research grants (details)" 에.
+#  새 연구비 예시 (맨 위에 추가):
+#    - title: National Research Foundation of Korea, Mid-career Researcher Program, Principal Investigator
+#      ko: 중견연구
+#      number: RS-2027-XXXXXXXX
+#      period: "2027 – 2032"
+#      ack: "This work was supported by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (No. RS-2027-XXXXXXXX)."
+#  새 수상 예시:
+#    - title: Some Prize, Some Society
+#      ko: 상 이름
+#      period: "2027"
+grants:
+  - title: "National Research Foundation of Korea, “Beyond Transformer, Beyond Next-Token Prediction”"
+    cv: NRF RFP grant
+    number: RS-2026-25613008
+    period: "2026 – 2031"
+    ack: "This work was supported by the National Research Foundation of Korea (NRF) grant funded by the Korea government (No. RS-2026-25613008)."   # 주관 부처(MSIT 등)는 협약서로 확인
+  - title: KIAS Alumni Outstanding Paper Award, KIAS
+    ko: 고등과학원 동문학술상
+    period: "2024"
+  - title: Young KAST Member, Korean Academy of Science and Technology
+    ko: 한국차세대과학기술한림원
+    period: "2023 –"
+  - title: Samsung Science and Technology Foundation Grant, Principal Investigator
+    ko: 삼성미래기술육성재단
+    number: SSTF-BA2302-02
+    period: "2023 –"
+    ack: "This work was supported by Samsung Science and Technology Foundation under Project Number SSTF-BA2302-02."
+  - title: NRF Science Research Center CM2LA, Participating Researcher
+    ko: 수리기계학습연구센터
+    number: RS-2023-00219980
+    url: https://www.cm2la.com
+    period: "2023 –"
+    ack: "This work was supported by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (No. RS-2023-00219980)."
+  - title: National Research Foundation of Korea, Individual Grant, Principal Investigator
+    ko: 우수신진연구
+    number: NRF-2022R1C1C1013511
+    period: "2022 – 2027"
+    ack: "This work was supported by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (No. NRF-2022R1C1C1013511)."
+  - title: KIAS Associate Member
+    period: "2022 –"
+  - title: POSCO Science Fellow, TJ Park Foundation
+    ko: 청암사이언스펠로
+    period: "2022 – 2023"
+  - title: Sangsan Young Mathematician Award, Korean Mathematical Society
+    ko: 상산젊은수학자상
+    period: "2021"
+  - title: Basic Science Research Institute, POSTECH
+    number: NRF-2021R1A6A1A10042944
+    period: "2021 – 2022"
+    ack: "This work was supported by Basic Science Research Institute Fund, whose NRF grant number is 2021R1A6A1A10042944."
+  - title: Summer Participant, NSF Grant 1600658
+    period: "2017 – 2019"
+    hide: [web]
+  - title: Faculty Fellowship, Columbia University
+    period: "2011 – 2019"
+  - title: Samsung Scholarship for doctoral study, Samsung Scholarship Foundation
+    ko: 삼성장학회
+    period: "2011 – 2019"
+  - title: Presidential Science Scholarship, Korea Student Aid Foundation
+    ko: 대통령과학장학생
+    period: "2007 – 2011"
+  - title: Undergraduate Thesis Award, KAIST
+    period: "2010"
+    hide: [web]
+
+# ── service (편집·학회 위원 등 대외 봉사) ─────────────────────────────
+#  필드: title(영문), ko(한글 병기), period, hide, memo
+#  CV의 "Editorial and professional service" 섹션이 됩니다.
+#  학회 위원은 현재 홈페이지에서는 숨김(hide: [web]). 홈페이지에도 보이려면 hide 줄을 지우세요.
+service:
+  - title: Editor, Bulletin of the Korean Mathematical Society
+    period: "2026.07 –"
+  - title: Committee Member, Analysis Division, Korean Mathematical Society
+    ko: 대한수학회 해석학 분과위원
+    period: "2024 – 2026"
+    hide: [web]
+  - title: Committee Member, PDE Division, Korean Society for Industrial and Applied Mathematics
+    ko: 한국산업응용수학회 편미분방정식 분과위원
+    period: "2022 – 2024"
+    hide: [web]
+
+# ── referee (논문 심사) ──────────────────────────────────────────────
+#  journals : 심사한 학술지 목록 (record 에 한 줄로 표시. CV에 넣으려면 outputs.cv 에 referee 추가)
+#  records  : 건별 기록. 원고번호까지 남길 거면 공개되지 않도록 private.yml 의 "Refereeing log" 에 적으세요.
+referee:
+  journals: [Acta Math., Geom. Funct. Anal. (GAFA), Duke Math. J., Comm. Pure Appl. Math., Arch. Ration. Mech. Anal., Comm. Anal. Geom., Canad. J. Math.]
+  memo: 목록은 일부입니다. 심사할 때마다 아래 records 에 한 줄씩 추가해 두면 평가 때 편합니다.
+  records: []
+  # records:
+  #   - {date: "2026-11", journal: Canad. J. Math., result: minor revision}
+
+# ── organized (학회·워크숍·세션 조직) ─────────────────────────────────
+#  필드: title, place, date(자유 문자열), with(공동 조직자 목록, "Co-organized with ..."로 표시),
+#        status(upcoming 이면 "(upcoming)" 표시 — 행사가 끝나면 지우세요),
+#        url(제목에 걸리는 링크), links(추가 링크 목록: label + file 또는 url), hide, memo
+#  예시:
+#    - title: The 23rd KIAS Winter School on Geometry
+#      with: [A. Coauthor, B. Coauthor]
+#      date: "January 2028"
+#      status: upcoming
+#      url: https://symposia.kias.re.kr/kwsg_2028
+#      links:
+#        - {label: Program book, file: files/KWSG2028_program.pdf}
+organized:
+  - title: The 22nd KIAS Winter School on Geometry
+    with: [K. Choi, T. Lee, J. Park, J. Pyo]
+    date: "January 2027"
+    status: upcoming
+    url: https://symposia.kias.re.kr/kwsg_2027
+  - title: KAIST–ECNU Joint Workshop on Geometric Analysis and Differential Geometry
+    place: KAIST, Daejeon, Korea
+    date: "November 5–8, 2026"
+    links:
+      - {label: Program book, file: files/KAIST-ECNU_Workshop_2026_Program.pdf, url: "https://drive.google.com/file/d/1H1SzU_MISiPzNwgNV1OazglK5tvfkZwg/view"}
+  - title: "MATRIX–RIMS Tandem Workshop: Geometric Flows and Related Phenomena"
+    place: RIMS, Kyoto University, Kyoto, Japan
+    date: "September 14–18, 2026"
+    url: https://sites.google.com/view/2026-matrix-rims-tandem
+  - title: The 21st KIAS Winter School on Geometry
+    with: [K. Choi, J. Pyo]
+    url: http://events.kias.re.kr/h/WSG26/?pageNo=6131
+  - title: "KMS Special Session “Recent Advances in PDEs and Geometric Analysis”"
+    with: [K. Choi]
+    date: "April 25, 2025"
+  - title: Special Session SS-06, KMS 80th Anniversary International Conference
+    date: "2026"
+    hide: [web, cv]
+  - title: PDE Special Session, KSIAM 2023 Spring Conference
+    place: Alpensia, Pyeongchang, Korea
+    date: "May 19–21, 2023"
+    hide: [web, cv]
+  - title: The 20th KIAS Winter School on Geometry
+    with: [K. Choi, J. Lee]
+    url: http://events.kias.re.kr/h/WSG25/?pageNo=5779
+
+# ── teaching (강의) ─────────────────────────────────────────────────
+#  instructor : 담당 강의. 필드 course(과목번호 + 과목명), term("Fall 2027" 등), place(기관),
+#               level(graduate 이면 CV에 "(graduate)" 표시), url(강의 페이지가 있으면)
+#  assistant  : 조교 경력 (홈페이지에서는 접힌 목록)
+#  새 학기마다 instructor 맨 위에 한 줄 추가:
+#    - {course: "MAS999 Example Course", term: Spring 2027, place: KAIST}
+teaching:
+  instructor:
+    - {course: "MAS480 Optimal Transport, PDEs, and Machine Learning", term: Fall 2026, place: KAIST}
+    - {course: "MAS645 Partial Differential Equations", term: Spring 2026, place: KAIST}
+    - {course: "MAS443 Ordinary Differential Equations and Dynamical Systems", term: Fall 2025, place: KAIST}
+    - {course: "MATH647 Topics in Nonlinear PDE", level: graduate, term: Spring 2025, place: POSTECH}
+    - {course: "MATH621 Riemannian Geometry", level: graduate, term: Fall 2024, place: POSTECH}
+    - {course: "MATH514 Real Analysis I", level: graduate, term: Spring 2024, place: POSTECH}
+    - {course: "MATH517 Partial Differential Equations", level: graduate, term: Fall 2023, place: POSTECH}
+    - {course: "MATH647 Topics in Nonlinear PDE", level: graduate, term: Spring 2022, place: POSTECH}
+    - {course: "MATH520 Differentiable Manifolds", level: graduate, term: Spring 2022, place: POSTECH}
+    - {course: "MATH203 Applied Linear Algebra", term: Fall 2021, place: POSTECH}
+    - {course: "MAT235 Multivariable Calculus (full year)", term: 2020 – 2021, place: University of Toronto, url: "https://sites.google.com/site/mathbeomjun/mat235"}
+    - {course: "MAT235 Multivariable Calculus (full year)", term: 2019 – 2020, place: University of Toronto}
+    - {course: "Calculus II", term: Spring 2019, place: Columbia University}
+    - {course: "Calculus I", term: Spring 2017, place: Columbia University}
+  assistant:
+    - {course: Ordinary Differential Equations, term: Fall 2018}
+    - {course: Analysis and Optimization, term: Spring 2018}
+    - {course: Modern Analysis I, term: Fall 2017}
+    - {course: Ordinary Differential Equations, term: Fall 2016}
+    - {course: Ordinary Differential Equations, term: Spring 2013}
+    - {course: Introduction to Mathematical Finance, term: Fall 2012}
+    - {course: Calculus II, term: Summer 2012}
+    - {course: Modern Analysis II, term: Summer 2012}
+
+# ── notes (강의노트·자료) ──────────────────────────────────────────────
+#  PDF는 저장소의 files/ 폴더에 넣고 file: 로 경로를 적습니다. url: 은 예비 외부 링크.
+#  예시:
+#    - title: Lecture notes on some topic
+#      file: files/lecture_notes.pdf
+#      description: Notes for a graduate course.
+notes:
+  - title: Parabolic Krylov–Safonov Harnack inequality
+    file: files/Parabolic_Krylov-Safonov_Harnack.pdf
+    url: https://drive.google.com/file/d/1C13sO644AyCzmBRdywTDN9TUBHKooXG5/view?usp=sharing
+    description: >-
+      Based on a talk in the graduate geometric analysis seminar at Columbia University, Fall 2017.
+      Most of the proof ideas and outlines follow the notes of Connor Mooney.
+
+# ── talks_recurring (정기 세미나 등 날짜 없는 강연) ─────────────────────
+talks_recurring:
+  - Graduate Student Geometric Analysis Seminar, Columbia University (every semester while at Columbia)
+# ── talks (강연) ────────────────────────────────────────────────────
+#  CV의 Talks 섹션과 record 의 연도별 강연 통계에 쓰입니다. 홈페이지에는 나오지 않습니다.
+#  필드: date("YYYY-MM" 또는 "YYYY-MM-DD", 반드시 따옴표), title(강연 제목, 알면),
+#        event(행사·세미나 이름), place(기관, 도시, 국가), hide, memo
+#  새 강연은 맨 위에 추가:
+#    - date: "2026-12"
+#      title: "Title of the talk"
+#      event: "Colloquium"
+#      place: "Some University, City, Country"
+talks:
+  - date: "2026-11-07"
+    title: "Rigidity in Monge–Ampère equations and geometric flows"
+    event: "KAIST–ECNU Joint Workshop on Geometric Analysis and Differential Geometry"
+    place: "KAIST, Daejeon, Korea"
+  - date: "2026-10-29"
+    title: "Asymptotics of mean-field Langevin dynamics"
+    event: "KMS Annual Meeting, Special Session SS-12 Mathematics of Machine Learning"
+    place: "GIST, Gwangju, Korea"
+  - date: "2026-10"
+    event: "ReaDiNet 2026"
+    place: "Clermont-Ferrand, France"
+  - date: "2026-10"
+    event: "HCMC Colloquium"
+    place: "KIAS, Seoul, Korea"
+  - date: "2026-09"
+    event: "Seminar"
+    place: "National University of Singapore, Singapore"
+  - date: "2026-08"
+    event: "Conference on Analysis and PDEs celebrating Jaeyoung Byeon’s 60th birthday"
+    place: "Seogwipo, Jeju, Korea"
+  - date: "2026-07"
+    event: "AI and Mathematics Program, Week 3: Geometry and PDE"
+    place: "KIAS, Seoul, Korea"
+  - date: "2026-07"
+    event: "Mini-course, 2026 International Summer School for Advanced Undergraduate Students"
+    place: "KAIST, Daejeon, Korea"
+  - date: "2026-07"
+    event: "The 15th AIMS Conference, Special Session on Geometric Evolution Problems"
+    place: "Athens, Greece"
+  - date: "2026-06"
+    event: "Korea–China Conference on Partial Differential Equations"
+    place: "Seoul National University, Seoul, Korea"
+  - date: "2026-05"
+    event: "Seminar"
+    place: "Gyeongsang National University, Jinju, Korea"
+  - date: "2026-05"
+    event: "Colloquium"
+    place: "Gyeongsang National University, Jinju, Korea"
+  - date: "2026-05"
+    event: "Current Challenges in Topology"
+    place: "Milan, Italy"
+  - date: "2026-05"
+    title: "Mean field game and stability of Nash equilibrium"
+    event: "ECNU–KAIST Joint Workshop"
+    place: "East China Normal University, Shanghai, China"
+  - date: "2026-03"
+    event: "PDE Seminar"
+    place: "Yonsei University, Seoul, Korea"
+  - date: "2025-11"
+    event: "Special Session, 2025 KSIAM Annual Meeting"
+    place: "Gyeongju, Korea"
+  - date: "2025-11"
+    event: "Colloquium"
+    place: "KAIST Mathematical Sciences, Daejeon, Korea"
+  - date: "2025-10"
+    event: "France–Korea Joint Workshop on Mathematical Biology"
+    place: "KAIST, Daejeon, Korea"
+  - date: "2025-10"
+    event: "VIASM–KAIST 2025 Conference"
+    place: "Daejeon, Korea"
+  - date: "2025-10"
+    event: "ReaDiNet 2025"
+    place: "Hokkaido University, Japan"
+  - date: "2025-10"
+    event: "Seminar"
+    place: "Konkuk University, Seoul, Korea"
+  - date: "2025-10"
+    event: "Seminar, Cho Chun Shik Graduate School of Mobility"
+    place: "KAIST, Daejeon, Korea"
+  - date: "2025-09"
+    event: "Geometric Analysis and Phenomena Workshop"
+    place: "Kyoto University, Japan"
+  - date: "2025-09"
+    event: "Colloquium"
+    place: "Sogang University, Seoul, Korea"
+  - date: "2025-08"
+    event: "2025 China–Korea Workshop on Partial Differential Equations"
+    place: "USTC, China"
+  - date: "2025-08"
+    event: "Seminar"
+    place: "Fudan University, China"
+  - date: "2025-07"
+    event: "Seminar"
+    place: "KIAS, Seoul, Korea"
+  - date: "2025-07"
+    title: "Rigidity of ancient ovals in mean curvature flow"
+    event: "Differentialgeometrie im Großen, Oberwolfach Workshop"
+    place: "Oberwolfach, Germany"
+  - date: "2025-05"
+    event: "Recent Advances on Elliptic and Parabolic Equations"
+    place: "HKUST, Hong Kong"
+  - date: "2025-05"
+    event: "Colloquium"
+    place: "Incheon National University, Incheon, Korea"
+  - date: "2025-04"
+    event: "Colloquium"
+    place: "Yonsei University, Seoul, Korea"
+  - date: "2025-02"
+    event: "MATRIX–MFO Tandem Workshop: Nonlinear Geometric Diffusion Equations"
+    place: "MATRIX Institute, Australia"
+  - date: "2025-01"
+    event: "11th Korea PDE Winter School"
+    place: "UNIST, Ulsan, Korea"
+  - date: "2024-12"
+    event: "KIAS Alumni Workshop"
+    place: "KIAS, Seoul, Korea"
+  - date: "2024-12"
+    event: "Differential Geometry Seminar"
+    place: "NCTS, Taiwan (online)"
+  - date: "2024-11"
+    event: "MIST 2024 Workshop"
+    place: "CUHK, Hong Kong"
+  - date: "2024-10"
+    event: "UNIST Workshop on Nonlinear PDEs"
+    place: "UNIST, Ulsan, Korea"
+  - date: "2024-10"
+    event: "Contributed talk, 2024 KMS Fall Meeting"
+    place: "Suwon, Korea"
+  - date: "2024-08"
+    event: "Seminar"
+    place: "GIST, Gwangju, Korea"
+  - date: "2024-08"
+    event: "PIMS–CM2LA Kantorovich Initiative Retreat Meeting"
+    place: "PIMS, Vancouver, Canada"
+  - date: "2024-08"
+    event: "Workshop on Differential Geometry and PDEs"
+    place: "Jeungpyeong, Korea"
+  - date: "2024-07"
+    event: "PDE Seminar"
+    place: "KAIST, Daejeon, Korea"
+  - date: "2024-06"
+    event: "9th Pacific Rim Conference in Mathematics, invited talk in the Differential Geometry session"
+    place: "Darwin, Australia"
+  - date: "2024-06"
+    event: "Colloquium, Mathematical Sciences Institute"
+    place: "Australian National University, Canberra, Australia"
+  - date: "2024-03"
+    event: "The 2nd Y-KAST International Conference"
+    place: "Jeju, Korea"
+  - date: "2024-03"
+    event: "East Asia Workshop on Nonlinear Evolution Equations"
+    place: "University of Tokyo, Japan"
+  - date: "2024-01"
+    event: "2024 Japan–Korea Workshop on Nonlinear PDEs and Its Applications"
+    place: "Hiroshima University, Japan"
+  - date: "2023-11"
+    event: "Colloquium, Department of Mathematics"
+    place: "University of Seoul, Seoul, Korea"
+  - date: "2023-10"
+    event: "Workshop on Degenerate and Singular Diffusion"
+    place: "ICMAT, Madrid, Spain"
+  - date: "2023-09"
+    event: "2023 Korea–Japan Workshop on Nonlinear PDEs and Its Applications"
+    place: "Busan, Korea"
+  - date: "2023-08"
+    event: "HK SIAM 2023, minisymposium"
+    place: "CUHK, Hong Kong"
+  - date: "2023-08"
+    event: "The 3rd International Undergraduate Mathematics Summer School"
+    place: "Seoul National University, Seoul, Korea"
+  - date: "2023-06"
+    event: "International Conference on Differential Geometry and its Applications in honor of Jaigyoung Choe’s 70th birthday"
+    place: ""
+  - date: "2023-06"
+    event: "PDE in Seoul 2023: Conference in honor of Prof. Mikhail Safonov’s 70th birthday"
+    place: "Seoul, Korea"
+  - date: "2023-05"
+    event: "Geometry and Topology Seminar"
+    place: "Pusan National University, Busan, Korea"
+  - date: "2023-05"
+    event: "SAARC Seminar"
+    place: "KAIST, Daejeon, Korea"
+  - date: "2023-04"
+    event: "2023 KMS Spring Meeting, special session"
+    place: "Daejeon, Korea"
+  - date: "2023-02"
+    event: "The 3rd Conference on Surfaces, Analysis, and Numerics"
+    place: "Korea University, Seoul, Korea"
+  - date: "2023-02"
+    event: "Winter School in Geometry"
+    place: "KIAS, Seoul, Korea"
+  - date: "2022-12"
+    event: "2022 SAARC PDE Conference"
+    place: "KAIST, Daejeon, Korea"
+  - date: "2022-11"
+    event: "DG and Symplectic Topology Seminar"
+    place: "University of Minnesota, USA"
+  - date: "2022-11"
+    event: "Analysis & Applied Math Seminar"
+    place: "University of Toronto, Canada"
+  - date: "2022-11"
+    event: "PDE Geometric Analysis Seminar"
+    place: "University of Wisconsin–Madison, USA"
+  - date: "2022-10"
+    event: "Seminar"
+    place: "Central China Normal University, China"
+  - date: "2022-10"
+    event: "BRL Seminar"
+    place: "Pusan National University, Busan, Korea"
+  - date: "2022-10"
+    event: "PDE Seminar"
+    place: "HKUST and Beijing Normal University"
+  - date: "2022-09"
+    event: "Differential Geometry Seminar"
+    place: "NCTS, National Taiwan University, Taiwan"
+  - date: "2022-08"
+    event: "2022 Workshop on Nonlinear PDEs and Its Applications"
+    place: "Jeju, Korea"
+  - date: "2022-07"
+    event: "HY-PDE Workshop"
+    place: "Hanyang University, Seoul, Korea"
+  - date: "2022-06"
+    event: "Seminar, Institut für Analysis und Numerik"
+    place: "University of Münster, Germany"
+  - date: "2022-06"
+    event: "Geometric Analysis Seminar"
+    place: "BICMR, Peking University, Beijing, China"
+  - date: "2022-05"
+    event: "Mathematics Colloquium"
+    place: "Hanyang University, Seoul, Korea"
+  - date: "2022-04"
+    event: "2022 KMS Spring Meeting, invited talk"
+    place: "online"
+  - date: "2022-01"
+    event: "2022 PDE Workshop, Yonsei CMAC"
+    place: "Busan, Korea"
+  - date: "2021-12"
+    event: "KIAS Workshop on Nonlinear Analysis"
+    place: "KIAS, Seoul, Korea"
+  - date: "2021-12"
+    event: "Pohang Mathematics Workshop"
+    place: "IBS-CGP, Pohang, Korea"
+  - date: "2021-11"
+    event: "Workshop on Stochastic Analysis and PDE"
+    place: "SAARC, KAIST, Daejeon, Korea"
+  - date: "2021-10"
+    event: "KMS Young Researchers’ Symposium"
+    place: ""
+  - date: "2021-06"
+    event: "CMS 75th Anniversary Summer Meeting, Special Session on Nonlinear Analysis on Manifolds"
+    place: "Ottawa, Canada"
+  - date: "2021-05"
+    event: "HY-PDE Seminar"
+    place: "online"
+  - date: "2021-02"
+    event: "1st Geometric Analysis Festival"
+    place: "online"
+  - date: "2021-02"
+    event: "Geometry Winter School"
+    place: "KIAS (online)"
+  - date: "2020-07"
+    event: "PDE Seminar"
+    place: "KAIST, Daejeon, Korea"
+  - date: "2020-07"
+    event: "SNU 2020 PDE Camp"
+    place: "Jeju, Korea"
+  - date: "2019-11"
+    event: "Geometry & Topology Seminar"
+    place: "McMaster University, Hamilton, Canada"
+  - date: "2019-10"
+    event: "Analysis and Applied Math Seminar"
+    place: "University of Toronto, Canada"
+  - date: "2019-09"
+    event: "Postdoc Seminar"
+    place: "University of Toronto, Canada"
+  - date: "2019-06"
+    event: "CMC Seminar"
+    place: "KIAS, Seoul, Korea"
+  - date: "2019-04"
+    event: "PDE Geometric Analysis Seminar"
+    place: "University of Wisconsin–Madison, USA"
+  - date: "2019-04"
+    event: "Differential Geometry and Mathematical Physics Seminar"
+    place: "UBC, Vancouver, Canada"
+  - date: "2019-04"
+    event: "Special Session, AMS Eastern Sectional Meeting"
+    place: "Hartford, USA"
+  - date: "2019-03"
+    event: "Differential Geometry and Geometric Analysis Seminar"
+    place: "Princeton University, USA"
+  - date: "2019-02"
+    event: "Geometric Analysis Seminar"
+    place: "Rutgers University, USA"
+  - date: "2018-12"
+    event: "Differential Geometry Seminar"
+    place: "Harvard University, USA"
+  - date: "2018-07"
+    event: "PDE Seminar"
+    place: "KAIST, Daejeon, Korea"
+  - date: "2018-07"
+    event: "CMC Seminar"
+    place: "KIAS, Seoul, Korea"
+  - date: "2018-05"
+    event: "John H. Barrett Memorial Lectures"
+    place: "University of Tennessee, Knoxville, USA"
+  - date: "2015-12"
+    event: "Reaction Diffusion Systems Arising in Biology"
+    place: "Institut Élie Cartan de Lorraine, University of Lorraine, France"
+  - date: "2015-09"
+    event: "Workshop in Nonlinear PDEs"
+    place: "Université Libre de Bruxelles, Belgium"
+  - date: "2015-07"
+    event: "Mathematical Biology Conference on Cross-diffusion, Chemotaxis, and Related Problems"
+    place: "KAIST, Daejeon, Korea"
+  - date: "2015-05"
+    event: "The 12th Workshop on Differential Equations"
+    place: "Chonnam National University, Gwangju, Korea"

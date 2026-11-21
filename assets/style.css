@@ -1,0 +1,150 @@
+/* ═══════════════════════════════════════════════════════════════════
+   assets/style.css — 홈페이지 디자인
+   Quiet, warm, unhurried: soft ivory paper, sumi ink, natural oak.
+   ═══════════════════════════════════════════════════════════════════
+   · 색은 바로 아래 :root 변수에서만 바꾸면 전체에 반영됩니다.
+       --paper 배경(옅은 미색) / --ink 본문 / --stone 보조 텍스트 / --hair 구분선 / --oak 강조(링크 밑줄 등)
+     다크 모드 값은 그 아래 두 블록(@media dark, [data-theme="dark"])에 같은 이름으로 있습니다.
+   · 레이아웃 폭: --label(왼쪽 섹션 제목 열), --measure(오른쪽 본문 최대 폭)
+   · 서체: 영문 Source Serif 4(Google Fonts), 한글 이름은 마루부리(네이버 웹폰트) → 실패 시 본명조.
+     서체 링크는 templates/index.html.j2 의 <head> 에 있습니다.
+   · 상단 곡선 그림은 assets/flow.js (곡선단축흐름 시뮬레이션) 입니다.
+*/
+@font-face { font-family: "MaruBuri Fallback"; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/MaruBuri-Regular.woff") format("woff"); }
+:root {
+  --paper: #fcfbf9;
+  --ink: #2a2926;
+  --stone: #7b766d;
+  --hair: #e6e3dc;
+  --oak: #9a7650;
+  --oak-soft: rgba(154, 118, 80, .35);
+  --measure: 44rem;
+  --label: 7rem;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1d1c1a; --ink: #e6e2da; --stone: #9a948a; --hair: #34312c;
+    --oak: #c6a67c; --oak-soft: rgba(198, 166, 124, .35); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #1d1c1a; --ink: #e6e2da; --stone: #9a948a; --hair: #34312c;
+  --oak: #c6a67c; --oak-soft: rgba(198, 166, 124, .35); color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Source Serif 4", "Source Serif Pro", Georgia, "Noto Serif KR", serif;
+  font-size: 1.0625rem;
+  font-optical-sizing: auto;
+  line-height: 1.62;
+  font-feature-settings: "kern", "liga", "onum";
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: underline; text-decoration-color: var(--oak-soft);
+    text-decoration-thickness: 1px; text-underline-offset: .22em; transition: color .2s, text-decoration-color .2s; }
+a:hover { color: var(--oak); text-decoration-color: var(--oak); }
+a:focus-visible, summary:focus-visible, canvas:focus-visible { outline: 1px solid var(--oak); outline-offset: 4px; border-radius: 2px; }
+
+/* navigation */
+.nav {
+  max-width: calc(var(--label) + var(--measure) + 3rem);
+  margin: 0 auto; padding: 2rem 1.5rem 0;
+  display: flex; justify-content: flex-end; gap: 1.75rem;
+  font-size: .95rem; color: var(--stone);
+}
+.nav a { text-decoration: none; }
+
+.page { max-width: calc(var(--label) + var(--measure) + 3rem); margin: 0 auto; padding: 0 1.5rem; }
+
+/* hero */
+.hero {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 2rem;
+  padding: 5.5rem 0 4.5rem; border-bottom: 1px solid var(--hair); margin-bottom: 1rem;
+}
+h1 {
+  margin: 0 0 1.5rem;
+  font-weight: 300; font-size: clamp(2.4rem, 6vw, 3.5rem); line-height: 1.08;
+  font-variation-settings: "opsz" 60; letter-spacing: -.012em;
+}
+h1 .ko { font-family: "MaruBuri", "MaruBuri Fallback", "Noto Serif KR", serif; font-weight: 300; font-size: .5em; color: var(--stone);
+         letter-spacing: .08em; margin-left: .35em; white-space: nowrap; }
+.role { margin: 0 0 1.25rem; font-size: 1.1rem; }
+.interests { margin: 0 0 1.75rem; max-width: 30rem; color: var(--stone); font-style: italic; }
+.contact { margin: 0; font-size: .97rem; line-height: 1.8; }
+
+.flow { margin: 0; width: 15rem; text-align: center; }
+.flow canvas { width: 15rem; height: 15rem; display: block; cursor: pointer; }
+.flow figcaption { margin-top: .4rem; font-size: .8rem; color: var(--stone); font-style: italic; }
+
+/* sections */
+.row {
+  display: grid; grid-template-columns: var(--label) minmax(0, var(--measure)); gap: 0 2rem;
+  padding: 3.25rem 0 .75rem;
+}
+h2 {
+  margin: .1rem 0 1rem; font-size: 1rem; font-weight: 400; font-style: italic; color: var(--stone);
+  line-height: 1.4;
+}
+
+.papers { list-style: none; margin: 0; padding: 0; }
+.papers li { display: grid; grid-template-columns: 3.2rem minmax(0, 1fr); margin-bottom: 1.35rem; }
+.yr, dt { color: var(--stone); font-variant-numeric: lining-nums tabular-nums; font-size: .92rem; padding-top: .12rem; }
+.title { text-decoration-color: transparent; }
+.title:hover { text-decoration-color: var(--oak); }
+.by, .meta, .note { display: block; font-size: .94rem; color: var(--stone); }
+.meta i { color: var(--ink); }
+.meta a { margin-left: .6rem; font-size: .88rem; }
+.meta a.first { margin-left: 0; }
+.note { font-style: italic; margin-top: .2rem; }
+.m { white-space: nowrap; }
+.m i { font-style: italic; }
+sup, sub { font-size: .7em; line-height: 0; }
+
+dl.plain { margin: 0; display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: .55rem 1rem; }
+dl.plain dd { margin: 0; }
+.plain-list { list-style: none; margin: 0; padding: 0; }
+.plain-list li { margin-bottom: 1rem; }
+
+details.ta { margin-top: 1.5rem; }
+details.ta summary { cursor: pointer; color: var(--stone); font-style: italic; list-style: none; }
+details.ta summary::-webkit-details-marker { display: none; }
+details.ta summary::before { content: "+"; display: inline-block; width: 1.1rem; color: var(--oak); font-style: normal; }
+details.ta[open] summary::before { content: "–"; }
+details.ta dl { margin-top: 1rem; }
+
+.foot {
+  max-width: calc(var(--label) + var(--measure) + 3rem); margin: 4rem auto 0; padding: 2rem 1.5rem 3rem;
+  border-top: 1px solid var(--hair); color: var(--stone); font-size: .85rem;
+  display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+}
+.foot p { margin: 0; }
+
+/* narrow screens */
+@media (max-width: 52rem) {
+  .hero { grid-template-columns: 1fr; padding-top: 3.5rem; }
+  .flow { justify-self: start; text-align: left; }
+  .row { grid-template-columns: 1fr; padding-top: 2.5rem; }
+}
+@media (max-width: 30rem) {
+  dl.plain { grid-template-columns: 1fr; gap: 0; }
+  dl.plain dd { margin-bottom: .8rem; }
+  .papers li { grid-template-columns: 1fr; }
+  .flow, .flow canvas { width: 12rem; }
+  .flow canvas { height: 12rem; }
+}
+
+@media print {
+  .nav, .flow { display: none; }
+  body { background: #fff; color: #000; }
+}

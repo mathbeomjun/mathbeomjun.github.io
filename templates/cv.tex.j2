@@ -1,0 +1,186 @@
+((=
+  ═══════════════════════════════════════════════════════════════════
+  templates/cv.tex.j2 — 공개 CV(cv.pdf)와 전체 기록(record.pdf)을 함께 만드는 XeLaTeX 템플릿
+  ═══════════════════════════════════════════════════════════════════
+  · 내용은 여기서 고치지 마세요 (data/papers.bib, data/cv.yml, private/private.yml).
+  · Jinja 구분자를 LaTeX 와 겹치지 않게 바꿔 두었습니다 (build.py 의 render_pdf 참조):
+      변수 = 여는 괄호 세 개 … 닫는 괄호 세 개 / 제어문 = 괄호+별표 / 주석 = 괄호+등호
+  · out 변수가 'cv' 또는 'record'. record 전용 내용은 ((* if out=='record' *)) 로 감쌉니다.
+  · 섹션 순서와 포함 여부는 cv.yml 의 outputs.cv / outputs.record 목록을 그대로 따릅니다.
+    새 섹션은 아래 ((* elif sec == '이름' *)) 블록을 하나 더 만들면 됩니다.
+  · 필터: |x → LaTeX 특수문자 이스케이프 + 한글을 \kr 서체로 감쌈
+           |b → BibTeX 필드(이미 LaTeX 형식)를 그대로, 한글만 감쌈
+           |u → URL 안의 % # & 이스케이프
+  · 값을 괄호로 감쌀 때는 여는 괄호를 중괄호로 감싼 {(} 와 {)} 를 쓰세요 (아래 grants 의 ko 참조).
+    괄호를 네 개 연달아 쓰면 Jinja 구분자와 겹쳐 괄호가 사라집니다.
+  · 서체: 영문 Source Serif 4 (fonts/ 폴더), 한글 Noto Serif CJK KR (시스템 설치 필요).
+=))
+\documentclass[10pt]{article}
+\usepackage[a4paper,left=24mm,right=24mm,top=22mm,bottom=22mm]{geometry}
+\usepackage{fontspec}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\setmainfont{SourceSerif4}[
+  Path = (((fontdir))), Extension = .otf,
+  UprightFont = *-Regular, ItalicFont = *-It, BoldFont = *-Semibold, BoldItalicFont = *-SemiboldIt,
+  FontFace = {l}{n}{*-Light}, Numbers = OldStyle]
+\newfontfamily\lining{SourceSerif4}[Path=(((fontdir))),Extension=.otf,UprightFont=*-Regular,Numbers=Lining]
+\newfontfamily\kr{Noto Serif CJK KR}[Scale=0.92]
+\newcommand\light{\fontseries{l}\selectfont}
+
+\definecolor{ink}{HTML}{2A2926}
+\definecolor{stone}{HTML}{7B766D}
+\definecolor{hair}{HTML}{DCD7CE}
+\definecolor{oak}{HTML}{9A7650}
+
+\linespread{1.18}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\color{ink}
+\hypersetup{pdftitle={(((profile.name))) -- ((* if out == 'record' *))Full record((* else *))Curriculum Vitae((* endif *))},pdfauthor={(((profile.name)))}}
+
+\makeatletter
+\renewcommand\@oddfoot{\hfil{\footnotesize\color{stone}\lining\thepage}\hfil}
+\renewcommand\@oddhead{}
+\makeatother
+
+\newlength\lab \setlength\lab{31mm}
+\newcommand\cvsection[1]{%
+  \par\vspace{15pt}\pagebreak[3]%
+  {\fontsize{11.5}{14}\selectfont #1}\par\vspace{4pt}%
+  {\color{hair}\hrule height .4pt}\vspace{9pt}\nopagebreak}
+\newcommand\cvsub[1]{\par\vspace{4pt}{\small\color{stone}\itshape #1}\par\vspace{5pt}\nopagebreak}
+\newcommand\cvitem[2]{%
+  \par\noindent\begin{minipage}[t]{\lab}\raggedright\strut\textcolor{stone}{\small\lining #1}\end{minipage}%
+  \begin{minipage}[t]{\dimexpr\linewidth-\lab}\raggedright\strut #2\end{minipage}\par\vspace{5pt}}
+\newcommand\sub[1]{\\{\small\color{stone}#1}}
+\newcommand\memo[1]{\\{\small\color{oak}\itshape #1}}
+\newcommand\talkitem[2]{%
+  \par\noindent\begin{minipage}[t]{\lab}\raggedright\strut\textcolor{stone}{\small\lining #1}\end{minipage}%
+  \begin{minipage}[t]{\dimexpr\linewidth-\lab}\raggedright\strut\small #2\end{minipage}\par\vspace{1.5pt}}
+
+\begin{document}
+
+\begin{minipage}[b]{.58\linewidth}
+  {\fontsize{25}{28}\selectfont\light (((profile.name)))}\,\,{\fontsize{14}{16}\selectfont\color{stone}\kr (((profile.name_ko)))}\par\vspace{7pt}
+  (((profile.position))), (((profile.department)))\\ (((profile.institution)))
+\end{minipage}\hfill
+\begin{minipage}[b]{.38\linewidth}\raggedleft\small\color{stone}
+  ((* for m in profile.emails *))\href{mailto:(((m)))}{(((m)))}\\((* endfor *))
+  \href{(((profile.url|u)))}{Homepage}\\
+  Updated (((updated)))
+\end{minipage}
+
+\vspace{12pt}{\color{oak}\rule{18mm}{.6pt}}
+((* if out == 'record' *))
+\par\vspace{6pt}{\small\color{oak}\itshape Full record for personal use. Includes items and notes that do not appear on the homepage or in the public CV.}
+((* endif *))
+
+((* for sec in outputs[out] *))
+((* if sec == 'summary' *))
+\cvsection{Summary}
+\cvitem{Papers}{(((stats.n_pub))) published, (((stats.n_acc))) accepted, (((stats.n_pre))) preprints}
+\cvitem{Talks}{(((stats.n_talks))) talks listed}
+\vspace{4pt}
+\cvitem{Year}{\makebox[44mm][l]{Published or accepted}\makebox[30mm][l]{arXiv postings}Talks}
+((* for y, r in stats.rows *))
+\cvitem{(((y)))}{\makebox[44mm][l]{\lining (((r.published)))}\makebox[30mm][l]{\lining (((r.posted)))}\lining (((r.talks)))}
+((* endfor *))
+
+((* elif sec == 'interests' *))
+\cvsection{Research interests}
+(((profile.interests_cv|x)))
+
+((* elif sec == 'positions' *))
+\cvsection{Current appointments}
+((* for e in vis(positions) if e.group == 'current' *))
+\cvitem{(((e.period)))}{(((e.role|x))), (((e.org|x)))((* if out=='record' and e.memo *))\memo{(((e.memo|x)))}((* endif *))}
+((* endfor *))
+\cvsection{Previous appointments}
+((* for e in vis(positions) if e.group == 'previous' *))
+\cvitem{(((e.period)))}{(((e.role|x))), (((e.org|x)))((* if out=='record' and e.memo *))\memo{(((e.memo|x)))}((* endif *))}
+((* endfor *))
+
+((* elif sec == 'education' *))
+\cvsection{Education}
+((* for e in vis(education) *))
+\cvitem{(((e.period)))}{(((e.degree))), (((e.place|x)))((* for n in e.notes *))\sub{(((n|x)))}((* endfor *))((* if out=='record' and e.memo *))\memo{(((e.memo|x)))}((* endif *))}
+((* endfor *))
+
+((* elif sec == 'publications' *))
+\cvsection{Published and accepted papers}
+((* for p in publications *))
+\cvitem{(((loop.index))).}{\href{((( (p.journal_url or p.arxiv_url)|u )))}{(((p.title|b)))}((* if p.with *)), with (((p.with|b)))((* endif *)).\sub{\textit{(((p.journal|b)))}((* if p.status == 'accepted' *)) (accepted)((* else *))((* if p.volume *)) (((p.volume)))((* endif *)) {(}(((p.year))){)}((* if p.pages *)), (((p.pages)))((* endif *))((* endif *))((* if p.arxiv *)). arXiv:(((p.arxiv)))((* endif *))}((* if out=='record' and private.paper_notes and private.paper_notes[p.key] *))\memo{(((private.paper_notes[p.key]|x)))}((* endif *))}
+((* endfor *))
+
+((* elif sec == 'preprints' *))
+\cvsection{Preprints}
+((* for p in preprints *))
+\cvitem{(((loop.index))).}{\href{(((p.arxiv_url|u)))}{(((p.title|b)))}((* if p.with *)), with (((p.with|b)))((* endif *)).\sub{arXiv:(((p.arxiv))) {(}(((p.year))){)}}((* if out=='record' and p.hide *))\memo{Not in the public CV}((* endif *))((* if out=='record' and private.paper_notes and private.paper_notes[p.key] *))\memo{(((private.paper_notes[p.key]|x)))}((* endif *))}
+((* endfor *))
+
+((* elif sec == 'grants' *))
+\cvsection{Grants, honors and awards}
+((* for g in vis(grants) *))
+\cvitem{(((g.period)))}{(((g.title|x)))((* if g.ko *)) {(}(((g.ko|x))){)}((* endif *))((* if g.number *))\sub{(((g.number|x)))}((* endif *))((* if out=='record' and g.ack *))\sub{\itshape Acknowledgment: (((g.ack|x)))}((* endif *))((* if out=='record' and g.memo *))\memo{(((g.memo|x)))}((* endif *))}
+((* endfor *))
+
+((* elif sec == 'service' *))
+\cvsection{Editorial and professional service}
+((* for s in vis(service) *))
+\cvitem{(((s.period)))}{(((s.title|x)))((* if s.ko *)) {(}(((s.ko|x))){)}((* endif *))((* if out=='record' and s.hide *))\memo{Not on the homepage or in the public CV}((* endif *))}
+((* endfor *))
+
+((* elif sec == 'referee' *))
+\cvsection{Refereeing}
+\cvitem{Journals}{(((referee.journals|join(', ')|x)))((* if out=='record' and referee.memo *))\memo{(((referee.memo|x)))}((* endif *))}
+((* for r in referee.records or [] *))
+\cvitem{(((r.date)))}{(((r.journal|x)))((* if r.result *))\sub{(((r.result|x)))}((* endif *))}
+((* endfor *))
+
+((* elif sec == 'organized' *))
+\cvsection{Conference organization}
+((* for o in vis(organized) *))
+\cvitem{}{((* if o.url *))\href{(((o.url|u)))}{(((o.title|x)))}((* else *))(((o.title|x)))((* endif *))\sub{((* if o.date *))(((o.date)))((* if o.place *)), (((o.place|x)))((* endif *))((* endif *))((* if o.status == 'upcoming' *)) (upcoming)((* endif *))((* if o.with_str *))((* if o.date *)). ((* endif *))Co-organized with (((o.with_str|x)))((* endif *))((* for l in o.links or [] *))((* if link(l) *)). \href{((( link(l)|u )))}{\color{oak}(((l.label)))}((* endif *))((* endfor *))}((* if out=='record' and o.hide *))\memo{Not on the homepage or in the public CV}((* endif *))}
+((* endfor *))
+
+((* elif sec == 'teaching' *))
+\cvsection{Teaching}
+\cvsub{Instructor}
+((* for c in vis(teaching.instructor) *))
+\cvitem{(((c.term)))}{(((c.course|x)))((* if c.level *)) {\small\color{stone}{(}(((c.level))){)}}((* endif *))\hfill{\small\color{stone}(((c.place)))}}
+((* endfor *))
+\cvsub{Teaching assistant, Columbia University}
+((* for c in vis(teaching.assistant) *))
+\cvitem{(((c.term)))}{(((c.course|x)))}
+((* endfor *))
+
+((* elif sec == 'notes' *))
+\cvsection{Notes}
+((* for n in vis(notes) *))
+\cvitem{}{((* if link(n) *))\href{((( link(n)|u )))}{(((n.title|x)))}((* else *))(((n.title|x)))((* endif *))\sub{(((n.description|x)))}}
+((* endfor *))
+
+((* elif sec == 'talks' *))
+\cvsection{Talks}
+((* for t in vis(talks) *))
+\talkitem{(((t.date[:7]|replace('-', '.'))))}{((* if t.title *))\textit{(((t.title|x)))}. ((* endif *))(((t.event|x)))((* if t.place *)), {\color{stone}(((t.place|x)))}((* endif *))((* if out=='record' and t.hide *)) {\color{oak}\itshape (not in the public CV)}((* endif *))}
+((* endfor *))
+((* for r in talks_recurring or [] *))
+\talkitem{}{(((r|x)))}
+((* endfor *))
+((* endif *))
+((* endfor *))
+
+((* if out == 'record' and private.sections *))
+((* for s in private.sections *))
+\cvsection{(((s.title|x)))}
+((* for i in s['items'] *))
+\cvitem{(((i.when|x)))}{(((i.what|x)))((* if i.detail *))\sub{(((i.detail|x)))}((* endif *))}
+((* endfor *))
+((* endfor *))
+((* endif *))
+
+\end{document}

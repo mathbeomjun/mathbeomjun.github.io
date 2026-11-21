@@ -1,0 +1,50 @@
+# .github/workflows/build.yml — 자동 빌드·배포
+# main 브랜치에 push 하면: Python·XeLaTeX 설치 → python build.py → _site/ 를 GitHub Pages 로 배포.
+# · 최초 1회: 저장소 Settings → Pages → Source 를 "GitHub Actions" 로 설정해야 동작합니다.
+# · 실패하면 저장소의 Actions 탭에서 빨간 X 를 눌러 로그를 확인하세요. 대부분 cv.yml/papers.bib 문법 오류입니다.
+# · record.pdf(비공개)는 여기서 만들지 않습니다 (--record 를 쓰지 않음).
+name: Build site and CV
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Python packages
+        run: pip install pyyaml==6.0.2 jinja2==3.1.4 bibtexparser==1.4.2
+      - name: Install XeLaTeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends texlive-xetex texlive-latex-recommended texlive-latex-extra latexmk fonts-noto-cjk
+      - name: Build
+        run: python build.py
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

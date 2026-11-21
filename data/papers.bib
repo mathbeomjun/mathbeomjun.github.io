@@ -1,0 +1,391 @@
+% ═════════════════════════════════════════════════════════════════════
+%  data/papers.bib — 모든 논문의 원본 (홈페이지·공개 CV·전체 기록이 모두 여기서 만들어짐)
+% ═════════════════════════════════════════════════════════════════════
+%
+%  ▶ 분류: status 필드로 정합니다.
+%      status = {preprint}  → "Preprints"     홈페이지에는 arXiv 링크만 표시
+%      status = {accepted}  → "Publications"  "Journal, accepted"로 표시 (권·쪽 없이)
+%      status 줄 없음       → "Publications"  게재 완료. journal, year, doi 필수
+%
+%  ▶ 정렬: 연도(year) 내림차순. 같은 연도 안에서는 이 파일에 적힌 순서(위가 먼저).
+%    새 논문은 해당 구역의 맨 위에 추가하세요.
+%
+%  ▶ 저자: "성, 이름" 형식으로 and 로 연결. 본인은 반드시 정확히 "Choi, Beomjun".
+%    본인은 자동으로 빠지고 나머지가 "with A, B and C"로 표시됩니다.
+%    공저자는 "Kim, A." 처럼 이니셜로 적으면 화면에도 "A. Kim"으로 나옵니다.
+%    (성이 Choi 인 공저자라도 이름이 Beomjun 이 아니면 공저자로 처리됩니다.)
+%
+%  ▶ 필드 정리
+%      author, title, year                     필수
+%      eprint = {2701.01234}                   arXiv 번호만 (링크는 abs 페이지로 자동 생성)
+%      archiveprefix = {arXiv}                 eprint 가 있으면 함께
+%      journal = {Adv. Math.}                  약어 표기 (MathSciNet 약어 권장)
+%      volume, number, pages = {931--1016}     CV에만 표시. 쪽 범위는 하이픈 두 개(--)
+%      doi = {10.xxxx/...}                     "https://doi.org/" 없이 번호만. 제목 링크가 됨
+%      url = {...}                             DOI가 없을 때만 저널 페이지 주소
+%      note = {...}                            홈페이지에 작은 기울임으로 표시되는 부연
+%      hide = {cv} 또는 {web} 또는 {cv, web}    해당 출력에서만 숨김 (record에는 항상 표시)
+%      status = {preprint|accepted}            위 분류 참조
+%
+%  ▶ 제목 표기: 수식은 $...$ (예: $\mathbb{R}^4$), 대시는 --(en dash), 특수문자는 그대로 유니코드(Ł, é).
+%    홈페이지에서는 간단한 수식(ℝ, 위첨자, 그리스 문자)만 변환됩니다.
+%
+%  ▶ 상태가 바뀔 때 (예: 프리프린트가 게재 승인 → 출판)
+%      1) 승인: 항목을 "Accepted" 구역으로 옮기고 status = {accepted}, journal 추가, year 갱신
+%      2) 출판: status 줄 삭제, doi·volume·pages 추가, "Published" 구역 맨 위로 이동
+%      인용 키(@article{여기}) 는 바꾸지 마세요. private.yml 의 paper_notes 가 이 키로 연결됩니다.
+%
+%  ▶ 새 프리프린트 템플릿
+%      @article{ChoiKim2027Example,
+%        author        = {Choi, Beomjun and Kim, A.},
+%        title         = {Title of the new preprint},
+%        year          = {2027},
+%        eprint        = {2701.01234},
+%        archiveprefix = {arXiv},
+%        status        = {preprint}
+%      }
+% ─────────────────────────────────────────────────────────────────────
+
+% ── Preprints (status = {preprint}) — 최신을 맨 위에 ────────────────────────────────────────────────────────
+
+@article{ChoiSeo2026KS,
+  author        = {Choi, Beomjun and Seo, G.},
+  title         = {Generic singularity formation in two-dimensional Keller--Segel systems},
+  year          = {2026},
+  eprint        = {2611.14237},
+  archiveprefix = {arXiv},
+  status        = {preprint}
+}
+
+@article{SeoKimChoi2026Soft,
+  author        = {Seo, G. and Kim, Y. and Choi, Beomjun},
+  title         = {Soft-confinement approximation of no-flux McKean--Vlasov dynamics},
+  year          = {2026},
+  eprint        = {2611.05431},
+  archiveprefix = {arXiv},
+  status        = {preprint}
+}
+
+@article{SeoChoiKim2026MY,
+  author        = {Seo, G. and Choi, Beomjun and Kim, Y.},
+  title         = {Moreau--Yosida penalization of McKean--Vlasov dynamics: full-flux limits and boundary reaction measures},
+  year          = {2026},
+  eprint        = {2610.25025},
+  archiveprefix = {arXiv},
+  status        = {preprint}
+}
+
+@article{ChoiDuParkYoun2026,
+  author        = {Choi, Beomjun and Du, W. and Park, S. C. and Youn, J.},
+  title         = {Sharp dynamical isoperimetric principle for mean curvature flow},
+  year          = {2026},
+  eprint        = {2610.10461},
+  archiveprefix = {arXiv},
+  status        = {preprint}
+}
+
+@article{ChoiJiangWangXiong2026,
+  author        = {Choi, Beomjun and Jiang, X. and Wang, H.-Y. and Xiong, J.},
+  title         = {Optimal weighted smoothing and asymptotics of ancient solutions for fast diffusion equations},
+  year          = {2026},
+  eprint        = {2605.14622},
+  archiveprefix = {arXiv},
+  status        = {preprint}
+}
+
+@article{SeoShinMonmarcheChoi2026,
+  author        = {Seo, G. and Shin, M. and Monmarché, P. and Choi, Beomjun},
+  title         = {Local exponential stability of mean-field Langevin descent--ascent and associated particle system},
+  year          = {2026},
+  eprint        = {2602.01564},
+  archiveprefix = {arXiv},
+  status        = {preprint}
+}
+
+@article{ChoiDuZhao2026,
+  author        = {Choi, Beomjun and Du, W. and Zhao, Z.},
+  title         = {Classification of ancient ovals in higher dimensional mean curvature flow},
+  year          = {2026},
+  eprint        = {2601.09441},
+  archiveprefix = {arXiv},
+  status        = {preprint}
+}
+
+@article{ChoiJeongSeo2025,
+  author        = {Choi, Beomjun and Jeong, S. and Seo, G.},
+  title         = {Wasserstein--Łojasiewicz inequalities and asymptotics of McKean--Vlasov equation},
+  year          = {2025},
+  eprint        = {2511.23361},
+  archiveprefix = {arXiv},
+  status        = {preprint}
+}
+
+@article{ChoiDuZhu2025,
+  author        = {Choi, Beomjun and Du, W. and Zhu, J.},
+  title         = {Rigidity of ancient ovals in higher dimensional mean curvature flow},
+  year          = {2025},
+  eprint        = {2504.09741},
+  archiveprefix = {arXiv},
+  status        = {preprint}
+}
+
+@article{ChoiHung2023,
+  author        = {Choi, Beomjun and Hung, P.-K.},
+  title         = {Asymptotics for slowly converging evolution equations},
+  year          = {2023},
+  eprint        = {2304.02254},
+  archiveprefix = {arXiv},
+  status        = {preprint},
+  note          = {A major improvement appears in “Thom’s gradient conjecture for nonlinear evolution equations.”},
+  hide          = {cv}
+}
+
+@article{Choi2022Existence,
+  author        = {Choi, Beomjun},
+  title         = {On existence of hypersurfaces translating by powers of Gauss curvature},
+  year          = {2022},
+  eprint        = {2204.09002},
+  archiveprefix = {arXiv},
+  status        = {preprint}
+}
+
+@article{ChoiChoiKim2021Sub,
+  author        = {Choi, Beomjun and Choi, K. and Kim, S.},
+  title         = {Translating surfaces under flows by sub-affine-critical powers of Gauss curvature},
+  year          = {2021},
+  eprint        = {2104.13186},
+  archiveprefix = {arXiv},
+  status        = {preprint}
+}
+
+@article{ChoiLee2015,
+  author        = {Choi, Beomjun and Lee, K.-A.},
+  title         = {Multi-D fast diffusion equation via diffusive scaling of generalized Carleman kinetic equation},
+  year          = {2015},
+  eprint        = {1510.08997},
+  archiveprefix = {arXiv},
+  status        = {preprint}
+}
+
+% ── Accepted (status = {accepted}) ─────────────────────────────────────────────────────────
+
+@article{ChoiHung2026Thom,
+  author        = {Choi, Beomjun and Hung, P.-K.},
+  title         = {Thom's gradient conjecture for nonlinear evolution equations},
+  journal       = {Duke Math. J.},
+  year          = {2026},
+  eprint        = {2405.17510},
+  archiveprefix = {arXiv},
+  status        = {accepted}
+}
+
+@article{ChoiChoiNoh2026GCF,
+  author        = {Choi, Beomjun and Choi, K. and Noh, D.},
+  title         = {Ancient Gauss curvature flows of bounded width},
+  journal       = {Pure Appl. Math. Q.},
+  year          = {2026},
+  eprint        = {2510.05614},
+  archiveprefix = {arXiv},
+  status        = {accepted}
+}
+
+% ── Published (status 없음) — 최신을 맨 위에 ────────────────────────────────────────────────────────
+
+@article{ChoiChoiKim2025Continuous,
+  author        = {Choi, Beomjun and Choi, K. and Kim, S.},
+  title         = {Continuous family of surfaces translating by powers of Gauss curvature},
+  journal       = {Adv. Math.},
+  year          = {2025},
+  doi           = {10.1016/j.aim.2025.110681},
+  eprint        = {2402.17075},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiChoiKim2025MA,
+  author        = {Choi, Beomjun and Choi, K. and Kim, S.},
+  title         = {Monge--Ampère equations with right-hand sides of polynomial growth},
+  journal       = {Nonlinear Anal.},
+  year          = {2025},
+  doi           = {10.1016/j.na.2025.113849},
+  eprint        = {2404.01040},
+  archiveprefix = {arXiv}
+}
+
+@article{CDDHS2025,
+  author        = {Choi, Beomjun and Daskalopoulos, P. and Du, W. and Haslhofer, R. and Sesum, N.},
+  title         = {Classification of bubble-sheet ovals in $\mathbb{R}^4$},
+  journal       = {Geom. Topol.},
+  volume        = {29},
+  number        = {2},
+  pages         = {931--1016},
+  year          = {2025},
+  doi           = {10.2140/gt.2025.29.931},
+  eprint        = {2209.04931},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiHaslhofer2024Ricci,
+  author        = {Choi, Beomjun and Haslhofer, R.},
+  title         = {Ricci limit flows and weak solutions},
+  journal       = {J. Eur. Math. Soc.},
+  year          = {2024},
+  doi           = {10.4171/jems/1565},
+  eprint        = {2108.02944},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiChoiDaskalopoulos2024,
+  author        = {Choi, Beomjun and Choi, K. and Daskalopoulos, P.},
+  title         = {Uniqueness of ancient solutions to Gauss curvature flow asymptotic to a cylinder},
+  journal       = {J. Differential Geom.},
+  year          = {2024},
+  doi           = {10.4310/jdg/1717356155},
+  eprint        = {2004.11754},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiSeis2024,
+  author        = {Choi, Beomjun and Seis, C.},
+  title         = {Finite-dimensional leading order dynamics for the fast diffusion equation near extinction},
+  journal       = {Discrete Contin. Dyn. Syst.},
+  year          = {2024},
+  doi           = {10.3934/dcds.2024043},
+  eprint        = {2308.15032},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiMcCannSeis2023,
+  author        = {Choi, Beomjun and McCann, R. and Seis, C.},
+  title         = {Asymptotics near extinction for nonlinear fast diffusion on a bounded domain},
+  journal       = {Arch. Ration. Mech. Anal.},
+  year          = {2023},
+  doi           = {10.1007/s00205-023-01850-3},
+  eprint        = {2202.02769},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiHaslhofer2023Blowup,
+  author        = {Choi, Beomjun and Haslhofer, R.},
+  title         = {A note on blowup limits in 3d Ricci flow},
+  journal       = {Math. Res. Lett.},
+  year          = {2023},
+  doi           = {10.4310/MRL.2022.v29.n5.a3},
+  eprint        = {2109.13875},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiHaslhofer2022Hitting,
+  author        = {Choi, Beomjun and Haslhofer, R.},
+  title         = {Hitting estimates on Einstein manifolds and applications},
+  journal       = {J. Reine Angew. Math.},
+  year          = {2022},
+  doi           = {10.1515/crelle-2022-0072},
+  eprint        = {2010.15860},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiHung2022IMCF,
+  author        = {Choi, Beomjun and Hung, P.-K.},
+  title         = {Inverse mean curvature flow with singularities},
+  journal       = {Int. Math. Res. Not. IMRN},
+  year          = {2022},
+  doi           = {10.1093/imrn/rnac097},
+  eprint        = {1811.04497},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiChoiDaskalopoulos2022,
+  author        = {Choi, Beomjun and Choi, K. and Daskalopoulos, P.},
+  title         = {Convergence of Gauss curvature flows to translating solitons},
+  journal       = {Adv. Math.},
+  volume        = {397},
+  year          = {2022},
+  doi           = {10.1016/j.aim.2022.108207},
+  eprint        = {1901.01080},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiGaoHaslhoferSigal2022,
+  author        = {Choi, Beomjun and Gao, J. and Haslhofer, R. and Sigal, D.},
+  title         = {Heat flow on time-dependent manifolds},
+  journal       = {J. Geom. Anal.},
+  volume        = {32},
+  number        = {11},
+  year          = {2022},
+  doi           = {10.1007/s12220-021-00780-4},
+  eprint        = {2006.15678},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiDaskalopoulos2021IMCF,
+  author        = {Choi, Beomjun and Daskalopoulos, P.},
+  title         = {Evolution of non-compact hypersurfaces by inverse mean curvature},
+  journal       = {Duke Math. J.},
+  volume        = {170},
+  number        = {12},
+  pages         = {2755--2803},
+  year          = {2021},
+  doi           = {10.1215/00127094-2020-0081},
+  eprint        = {1811.04594},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiChoiDaskalopoulos2021CSF,
+  author        = {Choi, Beomjun and Choi, K. and Daskalopoulos, P.},
+  title         = {Convergence of curve shortening flow to translating soliton},
+  journal       = {Amer. J. Math.},
+  volume        = {143},
+  number        = {4},
+  pages         = {1043--1077},
+  year          = {2021},
+  doi           = {10.1353/ajm.2021.0027},
+  eprint        = {1807.11100},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiDaskalopoulosKing2021,
+  author        = {Choi, Beomjun and Daskalopoulos, P. and King, J.},
+  title         = {Type II singularities on complete non-compact Yamabe flow},
+  journal       = {J. Reine Angew. Math.},
+  volume        = {772},
+  pages         = {83--119},
+  year          = {2021},
+  doi           = {10.1515/crelle-2020-0032},
+  eprint        = {1809.05281},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiHaslhoferHershkovits2021,
+  author        = {Choi, Beomjun and Haslhofer, R. and Hershkovits, O.},
+  title         = {A note on the selfsimilarity of limit flows},
+  journal       = {Proc. Amer. Math. Soc.},
+  volume        = {149},
+  pages         = {1239--1245},
+  year          = {2021},
+  doi           = {10.1090/proc/15251},
+  eprint        = {1910.02341},
+  archiveprefix = {arXiv}
+}
+
+@article{ChoiKim2019,
+  author        = {Choi, Beomjun and Kim, Y.-J.},
+  title         = {Diffusion of biological organisms; Fickian and Fokker--Planck type diffusions},
+  journal       = {SIAM J. Appl. Math.},
+  volume        = {79},
+  number        = {4},
+  pages         = {1501--1527},
+  year          = {2019},
+  doi           = {10.1137/18M1163944}
+}
+
+@article{ChoiDaskalopoulos2018,
+  author        = {Choi, Beomjun and Daskalopoulos, P.},
+  title         = {Yamabe flow: steady solitons and type II singularities},
+  journal       = {Nonlinear Anal.},
+  volume        = {173},
+  pages         = {1--18},
+  year          = {2018},
+  doi           = {10.1016/j.na.2018.03.008},
+  eprint        = {1709.03192},
+  archiveprefix = {arXiv}
+}

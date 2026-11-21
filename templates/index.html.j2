@@ -1,0 +1,207 @@
+{#
+  ═══════════════════════════════════════════════════════════════════
+  templates/index.html.j2 — 홈페이지 구조 (Jinja2 템플릿)
+  ═══════════════════════════════════════════════════════════════════
+  · 내용은 여기서 고치지 마세요. 논문은 data/papers.bib, 나머지는 data/cv.yml.
+  · 이 파일은 "어떤 섹션이 어떤 모양으로 놓이는가"만 정합니다.
+  · 섹션 표시 여부는 cv.yml 의 outputs.web 에서 제어합니다: {% if on('섹션명') %}
+  · 항목 숨김(hide: [web])은 vis(...) 가 처리합니다. 논문 목록은 build.py 에서 이미 걸러져 들어옵니다.
+  · link(item) 은 item 의 file(저장소 files/ 경로) 또는 url 을 골라 줍니다.
+  · 필터: | t  → 제목의 $수식$ 을 HTML로 변환 / | e → HTML 이스케이프
+  · 새 섹션을 추가하려면: cv.yml 에 데이터 키를 만들고, outputs.web 에 이름을 넣고,
+    아래 다른 섹션(<section class="row">...)을 복사해 같은 형식으로 추가합니다.
+  · 디자인(색·서체·여백)은 assets/style.css 에서 바꿉니다.
+#}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ profile.name }} ({{ profile.name_ko }})</title>
+<meta name="description" content="{{ profile.name }}, {{ profile.position }}, {{ profile.department }}, {{ profile.institution }}. {{ profile.interests_web | e }}.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://hangeul.pstatic.net/hangeul_static/css/maru-buri.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&text=%EC%B5%9C%EB%B2%94%EC%A4%80&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..600;1,8..60,300..600&display=swap">
+{% if inline %}
+<style>
+{{ inline_css }}
+</style>
+{% else %}
+<link rel="stylesheet" href="assets/style.css">
+{% endif %}
+</head>
+<body>
+
+<nav class="nav" aria-label="Sections">
+  <a href="#papers">Papers</a>
+  <a href="#teaching">Teaching</a>
+  <a href="cv.pdf">CV</a>
+</nav>
+
+<main class="page">
+
+  <header class="hero">
+    <div class="id">
+      <h1>{{ profile.name }} <span class="ko" lang="ko">{{ profile.name_ko }}</span></h1>
+      <p class="role">{{ profile.position }}<br>{{ profile.department }}, {{ profile.institution }}</p>
+      <p class="interests">{{ profile.interests_web | e }}</p>
+      <p class="contact">
+        {% for m in profile.emails %}<a href="mailto:{{ m }}">{{ m }}</a><br>{% endfor %}
+        <a href="cv.pdf">Curriculum vitae (PDF)</a>
+      </p>
+    </div>
+    <figure class="flow">
+      <canvas id="flow" width="320" height="320" role="img" aria-label="A closed curve shrinking under curve shortening flow, leaving nested traces"></canvas>
+      <figcaption>Curve shortening flow. Click to draw another curve.</figcaption>
+    </figure>
+  </header>
+
+  {% if on('publications') %}
+  <section class="row" id="papers">
+    <h2>Publications</h2>
+    <ol class="papers">
+    {% for p in publications %}
+      <li>
+        <span class="yr">{{ p.year }}</span>
+        <div>
+          <a class="title" href="{{ p.journal_url or p.arxiv_url }}">{{ p.title | t }}</a>
+          {% if p.with %}<span class="by">with {{ p.with }}</span>{% endif %}
+          <span class="meta"><i>{{ p.journal }}</i>{% if p.status == 'accepted' %}, accepted{% endif %}{% if p.arxiv %} <a href="{{ p.arxiv_url }}">arXiv</a>{% endif %}{% if p.journal_url %} <a href="{{ p.journal_url }}">Journal</a>{% endif %}</span>
+          {% if p.note %}<span class="note">{{ p.note | t }}</span>{% endif %}
+        </div>
+      </li>
+    {% endfor %}
+    </ol>
+  </section>
+  {% endif %}
+
+  {% if on('preprints') %}
+  <section class="row">
+    <h2>Preprints</h2>
+    <ol class="papers">
+    {% for p in preprints %}
+      <li>
+        <span class="yr">{{ p.year }}</span>
+        <div>
+          <a class="title" href="{{ p.arxiv_url }}">{{ p.title | t }}</a>
+          {% if p.with %}<span class="by">with {{ p.with }}</span>{% endif %}
+          <span class="meta"><a class="first" href="{{ p.arxiv_url }}">arXiv</a></span>
+          {% if p.note %}<span class="note">{{ p.note | t }}</span>{% endif %}
+        </div>
+      </li>
+    {% endfor %}
+    </ol>
+  </section>
+  {% endif %}
+
+  {% if on('positions') %}
+  <section class="row">
+    <h2>Positions</h2>
+    <dl class="plain">
+    {% for e in vis(positions) %}
+      <dt>{{ e.period }}</dt>
+      <dd>{{ e.web or (e.role ~ ', ' ~ e.org) }}</dd>
+    {% endfor %}
+    </dl>
+  </section>
+  {% endif %}
+
+  {% if on('education') %}
+  <section class="row">
+    <h2>Education</h2>
+    <dl class="plain">
+    {% for e in vis(education) %}
+      <dt>{{ e.period }}</dt>
+      <dd>{{ e.degree }}, {{ e.place }}{% for n in e.notes %}<span class="by">{{ n }}</span>{% endfor %}</dd>
+    {% endfor %}
+    </dl>
+  </section>
+  {% endif %}
+
+  {% if on('organized') %}
+  <section class="row">
+    <h2>Organized</h2>
+    <ul class="plain-list">
+    {% for o in vis(organized) %}
+      <li>{% if o.url %}<a href="{{ o.url }}">{{ o.title }}</a>{% else %}{{ o.title }}{% endif %}
+        <span class="by">{% if o.date %}{{ o.date }}{% if o.place %}, {{ o.place }}{% endif %}{% endif %}{% if o.status == 'upcoming' %} (upcoming){% endif %}{% if o.with_str %}{% if o.date %}. {% endif %}Co-organized with {{ o.with_str }}{% endif %}{% for l in (o.links or []) %} <a href="{{ link(l) }}">{{ l.label }}</a>{% endfor %}</span></li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if on('grants') %}
+  <section class="row">
+    <h2>Grants and honors</h2>
+    <dl class="plain">
+    {% for g in vis(grants) %}
+      <dt>{{ g.period }}</dt>
+      <dd>{% if g.url %}<a href="{{ g.url }}">{{ g.title }}</a>{% else %}{{ g.title }}{% endif %}</dd>
+    {% endfor %}
+    </dl>
+  </section>
+  {% endif %}
+
+  {% if on('service') %}
+  <section class="row">
+    <h2>Service</h2>
+    <dl class="plain">
+    {% for s in vis(service) %}
+      <dt>{{ s.period }}</dt>
+      <dd>{{ s.title }}</dd>
+    {% endfor %}
+    </dl>
+  </section>
+  {% endif %}
+
+  {% if on('teaching') %}
+  <section class="row" id="teaching">
+    <h2>Teaching</h2>
+    <div>
+      <dl class="plain">
+      {% for c in vis(teaching.instructor) %}
+        <dt>{{ c.term }}</dt>
+        <dd>{% if c.url %}<a href="{{ c.url }}">{{ c.course }}</a>{% else %}{{ c.course }}{% endif %}<span class="by">{{ c.place }}</span></dd>
+      {% endfor %}
+      </dl>
+      <details class="ta">
+        <summary>Teaching assistant at Columbia University, 2012–2018</summary>
+        <dl class="plain">
+        {% for c in vis(teaching.assistant) %}
+          <dt>{{ c.term }}</dt><dd>{{ c.course }}</dd>
+        {% endfor %}
+        </dl>
+      </details>
+    </div>
+  </section>
+  {% endif %}
+
+  {% if on('notes') %}
+  <section class="row">
+    <h2>Notes</h2>
+    <ul class="plain-list">
+    {% for n in vis(notes) %}
+      <li><a href="{{ link(n) }}">{{ n.title }}</a><span class="by">{{ n.description | e }}</span></li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+</main>
+
+<footer class="foot">
+  <p>{{ profile.address }}</p>
+  <p>Updated <time datetime="{{ updated_iso }}">{{ updated }}</time></p>
+</footer>
+
+{% if inline %}
+<script>
+{{ inline_js }}
+</script>
+{% else %}
+<script src="assets/flow.js" defer></script>
+{% endif %}
+</body>
+</html>
