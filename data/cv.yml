@@ -64,6 +64,8 @@ profile:
   url: https://mathbeomjun.github.io   # CV 머리글의 "Homepage" 링크
   # 배포된 홈페이지 주소. CV 안의 files/ 링크가 이 주소를 기준으로 만들어집니다 (비우면 각 항목의 url 사용).
   site_url: https://mathbeomjun.github.io
+  # Google Search Console 소유권 확인 코드 (HTML 태그 방식의 content 값). 지우면 확인이 풀립니다.
+  google_site_verification: 8WtxC430EGaTXLVZbhOgYst6pAvJn8te6zkUJJ09omI
   nationality: South Korea
   interests_web: Geometric analysis, calculus of variations, gradient flows and optimization
   interests_cv: >-

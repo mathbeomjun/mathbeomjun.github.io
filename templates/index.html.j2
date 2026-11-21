@@ -26,6 +26,9 @@
 <link rel="canonical" href="{{ site }}/">
 <meta property="og:url" content="{{ site }}/">
 {% endif %}
+{% if profile.google_site_verification %}
+<meta name="google-site-verification" content="{{ profile.google_site_verification }}">
+{% endif %}
 <meta property="og:type" content="profile">
 <meta property="og:site_name" content="{{ profile.name }}">
 <meta property="og:title" content="{{ profile.name }} ({{ profile.name_ko }})">
