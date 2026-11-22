@@ -59,7 +59,7 @@ profile:
   position: Associate Professor
   department: Department of Mathematical Sciences
   institution: KAIST
-  address: "Room 3403, Building E6-1, KAIST, 291 Daehak-ro, Yuseong-gu, Daejeon 34141, Korea"
+  address: "Building E6-1, KAIST, 291 Daehak-ro, Yuseong-gu, Daejeon 34141, Korea"
   emails: [bchoi@kaist.ac.kr, cbj5212@gmail.com]
   url: https://mathbeomjun.github.io   # CV 머리글의 "Homepage" 링크
   # 배포된 홈페이지 주소. CV 안의 files/ 링크가 이 주소를 기준으로 만들어집니다 (비우면 각 항목의 url 사용).

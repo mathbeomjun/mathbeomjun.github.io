@@ -30,6 +30,11 @@
 \newfontfamily\kr{Noto Serif CJK KR}[Scale=0.92]
 \newcommand\light{\fontseries{l}\selectfont}
 
+\hypersetup{pdftitle={(((profile.name))) -- ((* if out == 'record' *))Full record((* else *))Curriculum Vitae((* endif *))},pdfauthor={(((profile.name)))}}
+((* if out == 'cv' *))
+((* import 'cv-public.tex.j2' as public *))
+((( public.style(profile) )))
+((* else *))
 \definecolor{ink}{HTML}{2A2926}
 \definecolor{stone}{HTML}{7B766D}
 \definecolor{hair}{HTML}{DCD7CE}
@@ -39,7 +44,6 @@
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0pt}
 \color{ink}
-\hypersetup{pdftitle={(((profile.name))) -- ((* if out == 'record' *))Full record((* else *))Curriculum Vitae((* endif *))},pdfauthor={(((profile.name)))}}
 
 \makeatletter
 \renewcommand\@oddfoot{\hfil{\footnotesize\color{stone}\lining\thepage}\hfil}
@@ -61,8 +65,12 @@
   \par\noindent\begin{minipage}[t]{\lab}\raggedright\strut\textcolor{stone}{\small\lining #1}\end{minipage}%
   \begin{minipage}[t]{\dimexpr\linewidth-\lab}\raggedright\strut\small #2\end{minipage}\par\vspace{1.5pt}}
 
+((* endif *))
 \begin{document}
 
+((* if out == 'cv' *))
+((( public.header(profile, updated) )))
+((* else *))
 \begin{minipage}[b]{.58\linewidth}
   {\fontsize{25}{28}\selectfont\light (((profile.name)))}\,\,{\fontsize{14}{16}\selectfont\color{stone}\kr (((profile.name_ko)))}\par\vspace{7pt}
   (((profile.position))), (((profile.department)))\\ (((profile.institution)))
@@ -76,6 +84,8 @@
 \vspace{12pt}{\color{oak}\rule{18mm}{.6pt}}
 ((* if out == 'record' *))
 \par\vspace{6pt}{\small\color{oak}\itshape Full record for personal use. Includes items and notes that do not appear on the homepage or in the public CV.}
+((* endif *))
+
 ((* endif *))
 
 ((* for sec in outputs[out] *))
@@ -112,13 +122,21 @@
 ((* elif sec == 'publications' *))
 \cvsection{Published and accepted papers}
 ((* for p in publications *))
+((* if out == 'cv' *))
+((( public.paper(p, loop.index) )))
+((* else *))
 \cvitem{(((loop.index))).}{\href{((( (p.journal_url or p.arxiv_url)|u )))}{(((p.title|b)))}((* if p.with *)), with (((p.with|b)))((* endif *)).\sub{\textit{(((p.journal|b)))}((* if p.status == 'accepted' *)) (accepted)((* else *))((* if p.volume *)) (((p.volume)))((* endif *)) {(}(((p.year))){)}((* if p.pages *)), (((p.pages)))((* endif *))((* endif *))((* if p.arxiv *)). arXiv:(((p.arxiv)))((* endif *))}((* if out=='record' and private.paper_notes and private.paper_notes[p.key] *))\memo{(((private.paper_notes[p.key]|x)))}((* endif *))}
+((* endif *))
 ((* endfor *))
 
 ((* elif sec == 'preprints' *))
 \cvsection{Preprints}
 ((* for p in preprints *))
+((* if out == 'cv' *))
+((( public.paper(p, loop.index) )))
+((* else *))
 \cvitem{(((loop.index))).}{\href{(((p.arxiv_url|u)))}{(((p.title|b)))}((* if p.with *)), with (((p.with|b)))((* endif *)).\sub{arXiv:(((p.arxiv))) {(}(((p.year))){)}}((* if out=='record' and p.hide *))\memo{Not in the public CV}((* endif *))((* if out=='record' and private.paper_notes and private.paper_notes[p.key] *))\memo{(((private.paper_notes[p.key]|x)))}((* endif *))}
+((* endif *))
 ((* endfor *))
 
 ((* elif sec == 'grants' *))

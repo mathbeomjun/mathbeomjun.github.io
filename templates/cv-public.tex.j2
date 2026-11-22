@@ -1,0 +1,65 @@
+((= Layout for the public CV. The shared template controls content and section order. =))
+((* macro style(profile) *))
+\usepackage{needspace}
+\definecolor{ink}{HTML}{292822}
+\definecolor{stone}{HTML}{696258}
+\definecolor{hair}{HTML}{D8D1C7}
+\definecolor{oak}{HTML}{795A43}
+\linespread{1.14}
+\setlength{\headheight}{15pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\raggedbottom
+\color{ink}
+\newcommand\smallmeta{\sffamily\fontsize{8.5}{11}\selectfont\color{stone}}
+\newcommand\detailfont{\rmfamily\fontsize{9}{11.5}\selectfont\color{stone}}
+\newcommand\middotsep{\hspace{.35em}\textperiodcentered\hspace{.35em}}
+\newcommand\thinrule{{\color{hair}\hrule height .33pt}}
+\makeatletter
+\renewcommand\@oddhead{\ifnum\value{page}>1
+  \vbox{\hbox to \textwidth{{\smallmeta (((profile.name|x))) / (((profile.institution|x)))}\hfil{\smallmeta Curriculum vitae}}\vskip 4pt\thinrule}\fi}
+\renewcommand\@oddfoot{\hfil{\smallmeta\thepage}}
+\makeatother
+\newcounter{cvheading}
+\newcommand\cvsection[1]{%
+  \par\Needspace{5.75\baselineskip}\addvspace{15pt}%
+  \stepcounter{cvheading}\pdfbookmark[1]{#1}{cv-section-\thecvheading}%
+  {\fontsize{14}{17}\selectfont #1\par}\nobreak\vspace{3pt}\thinrule\nobreak\vspace{7pt}\nobreak}
+\newcommand\cvsub[1]{\par\Needspace{3\baselineskip}\addvspace{4pt}{\detailfont\itshape #1\par}\nobreak\vspace{4pt}\nobreak}
+\newcommand\sub[1]{\par\nobreak{\detailfont #1\par}}
+\newcommand\datedrow[3]{%
+  \par\noindent\begin{minipage}[t]{\dimexpr\linewidth-33mm\relax}\raggedright\strut #1\end{minipage}%
+  \hfill\begin{minipage}[t]{30mm}\raggedleft\leavevmode\smallmeta\strut #2\end{minipage}\par\addvspace{#3}}
+\newcommand\cvitem[2]{\datedrow{#2}{#1}{6pt}}
+\newcommand\talkitem[2]{\datedrow{{\fontsize{9.5}{12}\selectfont #2}}{#1}{5.5pt}}
+\newcommand\paperitem[4]{%
+  \par\noindent\begin{minipage}[t]{7mm}\leavevmode\smallmeta\strut #1.\end{minipage}%
+  \begin{minipage}[t]{\dimexpr\linewidth-21mm\relax}\raggedright\strut #2\sub{#3}\end{minipage}%
+  \hfill\begin{minipage}[t]{12mm}\raggedleft\leavevmode\smallmeta\strut #4\end{minipage}\par\addvspace{7pt}}
+((* endmacro *))
+((* macro header(profile, updated) *))
+{\detailfont\itshape Curriculum vitae\par}
+\vspace{5pt}
+\begin{minipage}[t]{.60\linewidth}\raggedright
+  {\fontsize{29}{33}\selectfont\light (((profile.name|x)))}%
+  ((* if profile.name_ko *))\hspace{.65em}{\fontsize{12.5}{15}\selectfont\color{stone}\kr (((profile.name_ko)))}((* endif *))\par
+  \vspace{5pt}
+  {\fontsize{10}{13}\selectfont (((profile.position|x)))\par
+  (((profile.department|x))), (((profile.institution|x)))\par}
+\end{minipage}\hfill
+\begin{minipage}[t]{.38\linewidth}\raggedleft\leavevmode\detailfont\strut
+  ((* for m in profile.emails *))\href{mailto:(((m|u)))}{(((m|x)))}\par
+  ((* endfor *))
+  ((* if profile.url *)){\color{oak}\urlstyle{same}\url{(((profile.url)))}}\par
+  ((* endif *))
+  \vspace{2pt}{\smallmeta Updated (((updated|x)))\par}
+\end{minipage}\par
+((* endmacro *))
+((* macro paper(p, n) *))
+((* set url = p.journal_url or p.arxiv_url *))
+\paperitem{(((n)))}{((* if url *))\href{(((url|u)))}{(((p.title|b)))}((* else *))(((p.title|b)))((* endif *))}{%
+((* if p.with *))with (((p.with|b)))((* endif -*))
+((* if p.journal *))((* if p.with *))\middotsep{}((* endif *))\textit{(((p.journal|b)))}((* if p.status == 'accepted' *)), accepted((* else *))((* if p.volume *)) (((p.volume|b)))((* if p.number *)){(}(((p.number|b))){)}((* endif *))((* endif *))((* if p.pages *)), (((p.pages|b)))((* endif *))((* endif *))((* endif -*))
+((* if p.arxiv_url *))((* if p.with or p.journal *))\middotsep{}((* endif *))\href{(((p.arxiv_url|u)))}{{\color{oak}arXiv:(((p.arxiv)))}}((* endif -*))
+}{(((p.year)))}
+((* endmacro *))
