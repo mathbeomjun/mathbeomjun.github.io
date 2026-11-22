@@ -28,6 +28,7 @@
 """
 import collections
 import datetime as dt
+import hashlib
 import html
 import json
 import re
@@ -252,11 +253,12 @@ def render_html(data, inline=False):
     env.filters["e"] = lambda s: html.escape(str(s or ""))
     ctx = context(data, "web")
     ctx["jsonld"] = site_meta(data)
+    css = (ROOT / "assets" / "style.css").read_bytes()
+    ctx["style_version"] = hashlib.sha256(css).hexdigest()[:16]
     (OUT / "index.html").write_text(env.get_template("index.html.j2").render(**ctx, inline=False), encoding="utf-8")
     if inline:
-        css = (ROOT / "assets" / "style.css").read_text(encoding="utf-8")
         js = (ROOT / "assets" / "flow.js").read_text(encoding="utf-8")
-        page = env.get_template("index.html.j2").render(**ctx, inline=True, inline_css=css, inline_js=js)
+        page = env.get_template("index.html.j2").render(**ctx, inline=True, inline_css=css.decode("utf-8"), inline_js=js)
         (OUT / "preview.html").write_text(page, encoding="utf-8")
 
 
