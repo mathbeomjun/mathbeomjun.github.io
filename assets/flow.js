@@ -3,14 +3,15 @@
 // it becomes convex, rounds off, and shrinks to a point. Traces are kept.
 // · 클릭(또는 Enter)하면 새 임의 곡선으로 다시 그립니다.
 // · prefers-reduced-motion 사용자는 애니메이션 없이 최종 그림만 봅니다.
-// · 조절값: TRACES(남길 단면 수), STOP_AREA(멈추는 시점의 넓이 비율), seedCurve() 의 진폭.
+// · 조절값: TRACES(남길 단면 수, style.css 의 --flow-traces 로 덮어씀), STOP_AREA(멈추는 시점의 넓이 비율), seedCurve() 의 진폭.
 // · 색은 style.css 의 --oak(현재 곡선)와 --stone(단면)을 그대로 씁니다.
 (function () {
   const canvas = document.getElementById("flow");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const NMAX = 240, TRACES = 13, STOP_AREA = 0.035;
+  const NMAX = 240, STOP_AREA = 0.035;
+  let TRACES = 13;
   let raf = null, traces = [], pts = [], L0 = 1, A0 = 1, T = 0, nextTrace = 0, Text = 1, frameDT = 0;
 
   const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
@@ -80,6 +81,7 @@
 
   function start() {
     cancelAnimationFrame(raf);
+    TRACES = parseInt(css("--flow-traces"), 10) || 13;
     pts = seedCurve(); L0 = length(pts); A0 = area(pts);
     Text = A0 / (2 * Math.PI); T = 0; traces = [pts.map((q) => q.slice())];
     nextTrace = Text / TRACES; frameDT = Text / 260;

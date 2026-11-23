@@ -255,6 +255,7 @@ def render_html(data, inline=False):
     ctx["jsonld"] = site_meta(data)
     css = (ROOT / "assets" / "style.css").read_bytes()
     ctx["style_version"] = hashlib.sha256(css).hexdigest()[:16]
+    ctx["script_version"] = hashlib.sha256((ROOT / "assets" / "flow.js").read_bytes()).hexdigest()[:16]
     (OUT / "index.html").write_text(env.get_template("index.html.j2").render(**ctx, inline=False), encoding="utf-8")
     if inline:
         js = (ROOT / "assets" / "flow.js").read_text(encoding="utf-8")

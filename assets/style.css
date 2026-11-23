@@ -113,14 +113,21 @@ summary::before { content: "+"; font-size: 1.05rem; line-height: 1; }
   .foot { flex-wrap: wrap; }
 }
 @media (max-width: 38rem) {
-  .masthead { align-items: flex-start; flex-direction: column; gap: .45rem; padding: 1.15rem 0 .6rem; }
-  nav { gap: .35rem 1.15rem; }
-  .hero { grid-template-columns: 1fr; padding: 2.25rem 0 1.6rem; }
+  /* Mobile: no wordmark (the name is right below), menu on the right. */
+  .masthead { justify-content: flex-end; min-height: 0; padding: 1rem 0 .85rem; }
+  .masthead > .wordmark { display: none; }
+  nav { gap: .35rem 1.2rem; }
+  .hero { position: relative; grid-template-columns: 1fr; padding: 2.4rem 0 2rem; }
   h1 { font-size: clamp(2.9rem, 11vw, 4rem); }
-  .interests { margin-top: 1.3rem; }
+  .interests { font-size: 1.2rem; line-height: 1.34; letter-spacing: -.018em; margin-top: 1.45rem; max-width: 19em; }
+  .affiliation { font-size: .875rem; }
   .affiliation::before { margin: 1.15rem 0 .8rem; }
-  .flow { width: min(100%, 13.25rem); }
-  .flow figcaption { gap: .03rem; }
+  .emails { display: grid; gap: .1rem; margin-top: .6rem; }
+  /* The curve becomes a seal (낙관) at the end of the intro: bottom-right, level with the last email line.
+     bottom = .hero padding-bottom. translate = optical nudge only; it moves nothing else. */
+  :root { --flow-traces: 7; }
+  .flow { position: absolute; right: 0; bottom: 2rem; width: 46px; transform: translate(1px, 9px); }
+  .flow figcaption { display: none; }
   .section { grid-template-columns: 1fr; gap: 1.15rem; padding: 1.5rem 0 1.65rem; }
   .foot { display: grid; gap: .7rem; padding: 1.4rem 0 2rem; }
 }
