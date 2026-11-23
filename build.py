@@ -285,12 +285,21 @@ def render_pdf(data, out, dest):
     shutil.copy(BUILD / f"{name}.pdf", dest)
 
 
+def replace_tree(src, dst):
+    """dst 를 src 의 새 복사본으로 교체 (지난 빌드에서 남은 파일도 정리됨).
+    Dropbox 폴더에서는 기존 _site 파일을 덮어쓰거나 그 플래그를 바꾸는 것이 막힐 수 있어
+    (Errno 1 Operation not permitted), 먼저 지우고 내용만 복사한다 (copy2 의 메타데이터·플래그 복사 생략)."""
+    if dst.exists():
+        shutil.rmtree(dst)
+    shutil.copytree(src, dst, copy_function=shutil.copy)
+
+
 def main():
     data = load()
     OUT.mkdir(exist_ok=True)
-    shutil.copytree(ROOT / "assets", OUT / "assets", dirs_exist_ok=True)
+    replace_tree(ROOT / "assets", OUT / "assets")
     if (ROOT / "files").exists():
-        shutil.copytree(ROOT / "files", OUT / "files", dirs_exist_ok=True)
+        replace_tree(ROOT / "files", OUT / "files")
     (OUT / ".nojekyll").touch()
     render_html(data, inline="--inline" in sys.argv)
     if "--no-pdf" not in sys.argv:
