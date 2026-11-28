@@ -139,6 +139,16 @@
 ((* endif *))
 ((* endfor *))
 
+((* elif sec == 'others' and others *))
+\cvsection{Other publications}
+((* for p in others *))
+((* if out == 'cv' *))
+((( public.paper(p, loop.index) )))
+((* else *))
+\cvitem{(((loop.index))).}{((* if p.journal_url *))\href{(((p.journal_url|u)))}{(((p.title|b)))}((* else *))(((p.title|b)))((* endif *))((* if p.with *)), with (((p.with|b)))((* endif *)).\sub{\textit{(((p.journal|b)))}((* if p.volume *)) (((p.volume)))((* endif *)) {(}(((p.year))){)}((* if p.pages *)), (((p.pages)))((* endif *))((* if p.note *)). (((p.note|b)))((* endif *))}((* if out=='record' and private.paper_notes and private.paper_notes[p.key] *))\memo{(((private.paper_notes[p.key]|x)))}((* endif *))}
+((* endif *))
+((* endfor *))
+
 ((* elif sec == 'grants' *))
 \cvsection{Grants, honors and awards}
 ((* for g in vis(grants) *))

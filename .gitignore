@@ -4,3 +4,4 @@ private_out/
 private/private.yml
 __pycache__/
 private/NOTES_FOR_AI.md
+.DS_Store

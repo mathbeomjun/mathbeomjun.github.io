@@ -19,7 +19,7 @@
 
 구조
     load()          cv.yml + papers.bib + private.yml 을 읽어 하나의 dict 로
-    load_papers()   BibTeX → 논문 dict 목록. status 로 publications/preprints 분리, 연도 내림차순
+    load_papers()   BibTeX → 논문 dict 목록. status 로 publications/preprints/others 분리, 연도 내림차순
     context()       출력(web/cv/record)별로 hide 필터(vis), 섹션 on/off(on), 링크 선택(link) 제공
     render_html()   templates/index.html.j2 → _site/index.html
     render_pdf()    templates/cv.tex.j2 → XeLaTeX(latexmk) → cv.pdf / record.pdf
@@ -149,14 +149,15 @@ def load_papers():
             p["posted"] = 2000 + yy
         papers.append(p)
     key = lambda p: (-p["year"], p["order"])
-    pubs = sorted([p for p in papers if p["status"] != "preprint"], key=key)
+    pubs = sorted([p for p in papers if p["status"] in ("published", "accepted")], key=key)
     pre = sorted([p for p in papers if p["status"] == "preprint"], key=key)
-    return papers, pubs, pre
+    other = sorted([p for p in papers if p["status"] == "other"], key=key)
+    return papers, pubs, pre, other
 
 
 def load():
     data = yaml.safe_load((ROOT / "data" / "cv.yml").read_text(encoding="utf-8"))
-    data["papers"], data["publications"], data["preprints"] = load_papers()
+    data["papers"], data["publications"], data["preprints"], data["others"] = load_papers()
     for o in data.get("organized", []):
         o["with_str"] = with_list(o.get("with"))
     for t in data.get("talks", []):
@@ -171,7 +172,7 @@ def load():
 def summary(data):
     rows = collections.defaultdict(lambda: {"published": 0, "posted": 0, "talks": 0})
     for p in data["papers"]:
-        if p["status"] != "preprint":
+        if p["status"] in ("published", "accepted"):
             rows[p["year"]]["published"] += 1
         if p.get("posted"):
             rows[p["posted"]]["posted"] += 1
@@ -209,6 +210,7 @@ def context(data, out):
     c["vis"] = lambda items: visible(items, out)
     c["publications"] = visible(data["publications"], out)
     c["preprints"] = visible(data["preprints"], out)
+    c["others"] = visible(data["others"], out)
     return c
 
 
@@ -308,7 +310,7 @@ def main():
         render_pdf(data, "record", PRIVATE_OUT / "record.pdf")
     write_seo(data)
     print(f"built: {len(data['publications'])} publications, {len(data['preprints'])} preprints, "
-          f"{len(data.get('talks', []))} talks")
+          f"{len(data['others'])} other publications, {len(data.get('talks', []))} talks")
 
 
 if __name__ == "__main__":

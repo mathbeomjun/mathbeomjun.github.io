@@ -6,6 +6,8 @@
 %      status = {preprint}  → "Preprints"     홈페이지에는 arXiv 링크만 표시
 %      status = {accepted}  → "Publications"  "Journal, accepted"로 표시 (권·쪽 없이)
 %      status 줄 없음       → "Publications"  게재 완료. journal, year, doi 필수
+%      status = {other}     → "Other publications"  심사 논문이 아닌 출판물 (Oberwolfach Reports 등).
+%                             논문 통계(published/accepted/preprints)에는 세지 않음
 %
 %  ▶ 정렬: 연도(year) 내림차순. 같은 연도 안에서는 이 파일에 적힌 순서(위가 먼저).
 %    새 논문은 해당 구역의 맨 위에 추가하세요.
@@ -25,7 +27,7 @@
 %      url = {...}                             DOI가 없을 때만 저널 페이지 주소
 %      note = {...}                            홈페이지에 작은 기울임으로 표시되는 부연
 %      hide = {cv} 또는 {web} 또는 {cv, web}    해당 출력에서만 숨김 (record에는 항상 표시)
-%      status = {preprint|accepted}            위 분류 참조
+%      status = {preprint|accepted|other}      위 분류 참조
 %
 %  ▶ 제목 표기: 수식은 $...$ (예: $\mathbb{R}^4$), 대시는 --(en dash), 특수문자는 그대로 유니코드(Ł, é).
 %    홈페이지에서는 간단한 수식(ℝ, 위첨자, 그리스 문자)만 변환됩니다.
@@ -388,4 +390,19 @@
   doi           = {10.1016/j.na.2018.03.008},
   eprint        = {1709.03192},
   archiveprefix = {arXiv}
+}
+
+% ── Other publications (status = {other}) — 최신을 맨 위에 ─────────────────────────────────────
+
+@article{ChoiHung2025OWR,
+  author        = {Choi, Beomjun and Hung, P.-K.},
+  title         = {Thom's gradient conjecture for geometric evolution equations},
+  journal       = {Oberwolfach Rep.},
+  volume        = {22},
+  number        = {3},
+  pages         = {1597--1599},
+  year          = {2025},
+  doi           = {10.4171/OWR/2025/30},
+  note          = {Report No. 30/2025, “Differentialgeometrie im Großen”},
+  status        = {other}
 }

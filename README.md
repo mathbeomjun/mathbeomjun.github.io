@@ -38,6 +38,7 @@ build.py                 빌드 스크립트
 | 새 프리프린트 | `data/papers.bib` | Preprints 구역 맨 위에 항목 추가, `status = {preprint}` (파일 머리말에 템플릿) |
 | 논문 게재 승인 | `data/papers.bib` | 해당 항목에 `status = {accepted}`, `journal` 추가, Accepted 구역으로 이동 |
 | 논문 출판 | `data/papers.bib` | `status` 줄 삭제, `doi`·`volume`·`pages` 추가, Published 구역 맨 위로 |
+| 기타 출판물 (Oberwolfach Reports 등) | `data/papers.bib` | Other publications 구역 맨 위에 추가, `status = {other}`. CV·record 의 "Other publications" 섹션에만 나옴 |
 | 새 강연 | `data/cv.yml` → `talks` | 맨 위에 `date`, `title`, `event`, `place` |
 | 새 연구비·수상 | `data/cv.yml` → `grants` | 맨 위에 추가. 과제번호는 `number`, 사사 문구는 `ack` |
 | 연구비 금액·역할 | `private/private.yml` | "Research grants (details)" 섹션 |

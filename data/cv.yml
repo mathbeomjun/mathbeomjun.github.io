@@ -39,13 +39,13 @@
 #  각 결과물에 어떤 섹션을 어떤 순서로 넣을지 정합니다.
 #  사용 가능한 섹션 이름:
 #    summary(record 전용 통계), interests, positions, education, publications, preprints,
-#    grants, service, referee, organized, teaching, talks, notes
+#    others(심사 논문 외 출판물: papers.bib 의 status = {other}), grants, service, referee, organized, teaching, talks, notes
 #  홈페이지(web)는 템플릿 구조상 publications→preprints→positions→… 순서가 고정이며,
 #  여기서는 '보일지 말지'만 결정합니다. cv/record 는 이 목록 순서대로 조판됩니다.
 outputs:
   web:    [publications, preprints, positions, education, organized, grants, service, teaching, notes]
-  cv:     [interests, positions, education, publications, preprints, grants, service, organized, teaching, talks, notes]
-  record: [summary, interests, positions, education, publications, preprints, grants, service, referee, organized, teaching, talks, notes]
+  cv:     [interests, positions, education, publications, preprints, others, grants, service, organized, teaching, talks, notes]
+  record: [summary, interests, positions, education, publications, preprints, others, grants, service, referee, organized, teaching, talks, notes]
 
 # ── profile ─────────────────────────────────────────────────────────
 #  홈페이지 머리글과 CV 머리글에 쓰이는 기본 정보.
@@ -415,9 +415,10 @@ talks:
     event: "Seminar"
     place: "KIAS, Seoul, Korea"
   - date: "2025-07"
-    title: "Rigidity of ancient ovals in mean curvature flow"
-    event: "Differentialgeometrie im Großen, Oberwolfach Workshop"
-    place: "Oberwolfach, Germany"
+    title: "Thom's gradient conjecture for geometric evolution equations"
+    event: "Oberwolfach Workshop 2527: Differentialgeometrie im Großen"
+    place: "MFO, Oberwolfach, Germany"
+    memo: "Workshop 2025-06-29 – 2025-07-04"
   - date: "2025-05"
     event: "Recent Advances on Elliptic and Parabolic Equations"
     place: "HKUST, Hong Kong"
